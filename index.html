@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متحف عائلة زرازير | أسطورة البقاء</title>
+
+    <!-- خطوط جوجل -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Amiri:wght@400;700&display=swap"
+        rel="stylesheet">
+
+    <!-- مكتبة الأيقونات FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cairo: ['"Cairo"', 'sans-serif'],
+                        amiri: ['"Amiri"', 'serif'],
+                    },
+                    colors: {
+                        primary: '#2c1e16',
+                        secondary: '#b8860b',
+                        surface: '#faf8f5',
+                        darkBg: '#121212',
+                        darkCard: '#1e1e1e',
+                    },
+                    animation: {
+                        'spin-slow': 'spin 8s linear infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="flex flex-col min-h-screen transition-colors duration-300">
+
+    <!-- شاشة التحميل -->
+    <div id="preloader">
+        <div class="loader-ring mb-4"></div>
+        <h2 class="font-heritage text-3xl text-secondary">عائلة زرازير</h2>
+        <p class="text-gray-400 mt-2 font-cairo">جاري تجهيز المتحف الرقمي...</p>
+    </div>
+
+    <!-- مؤشر الماوس -->
+    <div class="custom-cursor" id="cursor"></div>
+    <div class="custom-cursor-dot" id="cursor-dot"></div>
+
+    <!-- شريط تقدم القراءة -->
+    <div id="progress-bar"></div>
+
+    <!-- شريط التنقل -->
+    <nav
+        class="glass-nav text-white sticky top-0 z-50 shadow-lg border-b-4 border-secondary transition-colors duration-300">
+        <div class="container mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center">
+            <div class="text-3xl font-heritage font-bold text-secondary mb-4 md:mb-0 flex items-center gap-3">
+                <i class="fa-solid fa-fort-awesome"></i> عائلة زرازير
+            </div>
+            <div class="flex items-center space-x-6 space-x-reverse">
+                <div class="hidden lg:flex space-x-6 space-x-reverse text-lg font-semibold">
+                    <a href="#hero" class="hover:text-secondary transition-colors interactive">الرئيسية</a>
+                    <a href="#village" class="hover:text-secondary transition-colors interactive">أصالة القرية</a>
+                    <a href="#artifact" class="hover:text-secondary transition-colors interactive">اللوحة والأثر</a>
+                    <a href="#docs" class="hover:text-secondary transition-colors interactive">الوثائق والأنساب</a>
+                </div>
+                <!-- زر الوضع الليلي -->
+                <button id="theme-toggle"
+                    class="interactive bg-gray-700 hover:bg-secondary text-white p-2 rounded-full transition-colors w-10 h-10 flex items-center justify-center">
+                    <i class="fa-solid fa-moon" id="theme-icon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- المحتوى الرئيسي -->
+    <main class="flex-grow">
+
+        <!-- ================= القسم الأول: البانر ================= -->
+        <section id="hero" class="relative py-32 overflow-hidden border-b-[10px] border-secondary bg-primary">
+            <div
+                class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')] opacity-10 animation-spin-slow">
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/60"></div>
+            <div class="container mx-auto px-6 text-center relative z-10 reveal">
+                <div
+                    class="inline-block border-2 border-secondary px-8 py-2 rounded-full mb-8 text-xl font-bold text-secondary bg-black/30 backdrop-blur-sm shadow-lg">
+                    <i class="fa-solid fa-scroll ml-2"></i> ١٨٥٥ م - ١٢٧٢ هـ
+                </div>
+                <h1 class="text-6xl md:text-8xl font-heritage font-bold mb-6 text-white drop-shadow-lg">
+                    أسـطـورة البـقـاء
+                </h1>
+                <p class="text-2xl md:text-3xl max-w-5xl mx-auto leading-[2] font-medium text-gray-200 mt-6">
+                    رحلة مهيبة في ضيافة أحفاد <span class="text-secondary font-bold">الحاج زرازير أبوبكر
+                        الزوكي</span>.<br>
+                    حيث تتلاقى عظمة التاريخ، وفروسية الأجداد، وتتحدث الوثائق والآثار بأمجاد سُطرت بماء الذهب في ربوع
+                    قرية التل الزوكي.
+                </p>
+                <a href="#village"
+                    class="inline-block mt-12 bg-secondary hover:bg-yellow-600 text-white font-bold py-4 px-10 rounded-full shadow-[0_0_20px_rgba(184,134,11,0.5)] transform transition hover:-translate-y-2 text-xl interactive">
+                    ابدأ جولة التاريخ والفخر <i class="fa-solid fa-arrow-down mr-2"></i>
+                </a>
+            </div>
+        </section>
+
+        <!-- ================= قسم الإحصائيات ================= -->
+        <section
+            class="py-12 bg-white dark:bg-darkCard border-b border-gray-200 dark:border-gray-800 transition-colors">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center reveal">
+                    <div>
+                        <div class="text-4xl md:text-5xl font-bold text-secondary mb-2 counter" data-target="171">0
+                        </div>
+                        <div class="text-lg font-bold text-gray-600 dark:text-gray-400">عاماً من الصمود للوحة</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl md:text-5xl font-bold text-secondary mb-2 counter" data-target="1855">0
+                        </div>
+                        <div class="text-lg font-bold text-gray-600 dark:text-gray-400">عام التأسيس (ميلادي)</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl md:text-5xl font-bold text-secondary mb-2 counter" data-target="1884">0
+                        </div>
+                        <div class="text-lg font-bold text-gray-600 dark:text-gray-400">توثيق المحكمة</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl md:text-5xl font-bold text-secondary mb-2"><i
+                                class="fa-solid fa-infinity"></i></div>
+                        <div class="text-lg font-bold text-gray-600 dark:text-gray-400">تاريخ متجذر لا ينتهي</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= القسم الثاني: القرية والمعالم ================= -->
+        <section id="village" class="py-24 container mx-auto px-6 max-w-7xl">
+            <div class="text-center mb-20 reveal">
+                <span class="text-secondary font-bold text-xl tracking-wider">الجذور والمكان</span>
+                <h2 class="text-5xl md:text-6xl font-heritage font-bold text-primary dark:text-white mt-2 mb-6">القرية
+                    وشواهد الأصالة</h2>
+                <div class="w-32 h-2 bg-secondary mx-auto rounded-full mb-8"></div>
+                <p class="text-2xl leading-loose text-gray-700 dark:text-gray-300 max-w-4xl mx-auto">
+                    في أقصى شمال شرق بلاد الهلة، تتربع "التل الزوكي" كقلعة حصينة. تتجلى فيها عراقة المعمار الدفاعي الذي
+                    يعكس رجولة وكرم أهاليها، حيث تمتزج حكايات الشرف بصلابة الجدران.
+                </p>
+            </div>
+
+            <!-- بطاقة 1: الدوار -->
+            <div
+                class="flex flex-col lg:flex-row bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-800 mb-16 reveal hover:-translate-y-2 transition-transform duration-500">
+                <div class="lg:w-1/2 img-container bg-gray-100 dark:bg-gray-800 flex justify-center items-center p-2 interactive"
+                    onclick="openLightbox('7.jpg', 'دوار العائلة العريق')">
+                    <img src="7.jpg" alt="دوار العائلة" class="w-full h-full object-cover rounded-2xl shadow-inner">
+                    <div class="img-tooltip"><i
+                            class="fa-solid fa-magnifying-glass-plus mb-2 block text-center text-4xl"></i> اضغط لتكبير
+                        الصورة</div>
+                </div>
+                <div class="lg:w-1/2 p-10 lg:p-14 flex flex-col justify-center">
+                    <div class="text-secondary mb-4"><i class="fa-solid fa-house-chimney text-3xl"></i></div>
+                    <h3
+                        class="text-4xl font-bold text-primary dark:text-white mb-6 border-r-4 border-secondary pr-4 font-heritage">
+                        ديوان العز والكرم (دوار العائلة)</h3>
+                    <p class="text-xl text-gray-700 dark:text-gray-300 leading-loose text-justify">
+                        هذا المكان ليس مجرد بناء من حجر وطين، بل هو <span class="text-gradient font-bold">صرح شامخ
+                            وديوان للعز والكرم الحاتمي</span>. يمثل دوار عائلة زرازير القلب النابض للقرية، حيث تُفتح
+                        أبوابه للضيف قبل القريب. بين جدرانه عُقدت مجالس الحكمة والشورى، وفيه يتشرب الأحفاد قيم الرجولة،
+                        الشرف، والمكانة الاجتماعية الرفيعة التي ورثوها كابراً عن كابر. إنه الشاهد الحي على سيادة العائلة
+                        وسخائها الممتد عبر القرون.
+                    </p>
+                </div>
+            </div>
+
+            <!-- بطاقة 2: الرهبة -->
+            <div
+                class="flex flex-col lg:flex-row-reverse bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-800 mb-16 reveal hover:-translate-y-2 transition-transform duration-500">
+                <div class="lg:w-1/2 img-container bg-gray-100 dark:bg-gray-800 flex justify-center items-center p-2 interactive"
+                    onclick="openLightbox('6.jpg', 'ساحة ومسجد الرهبة')">
+                    <img src="6.jpg" alt="الرهبة" class="w-full h-full object-cover rounded-2xl shadow-inner">
+                    <div class="img-tooltip"><i
+                            class="fa-solid fa-magnifying-glass-plus mb-2 block text-center text-4xl"></i> اضغط لتكبير
+                        الصورة</div>
+                </div>
+                <div class="lg:w-1/2 p-10 lg:p-14 flex flex-col justify-center">
+                    <div class="text-secondary mb-4"><i class="fa-solid fa-mosque text-3xl"></i></div>
+                    <h3
+                        class="text-4xl font-bold text-primary dark:text-white mb-6 border-r-4 border-secondary pr-4 font-heritage">
+                        ساحة ومسجد الرهبة.. عبق الروحانية</h3>
+                    <p class="text-xl text-gray-700 dark:text-gray-300 leading-loose text-justify">
+                        ساحة تعبق بروحانية الأجداد ووقار التاريخ. "الرهبة" ليست مجرد مساحة، بل هي <span
+                            class="text-gradient font-bold">منبر للسلام والترابط المجتمعي</span>. في هذا المكان المبارك،
+                        تجتمع الكلمة الطيبة مع العمارة الإسلامية الأصيلة. هنا كانت تُعقد المواثيق، وتُحل القضايا العرفية
+                        بحكمة كبار العائلة. إنها الساحة التي تشهد على رجال عاهدوا الله على الصلاح والتقوى وحفظ الجوار.
+                    </p>
+                </div>
+            </div>
+
+            <!-- بطاقة 3: الأزقة -->
+            <div
+                class="flex flex-col lg:flex-row bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-800 mb-16 reveal hover:-translate-y-2 transition-transform duration-500">
+                <div class="lg:w-1/2 img-container bg-gray-100 dark:bg-gray-800 flex justify-center items-center p-2 interactive"
+                    onclick="openLightbox('8.jpg', 'الأزقة القديمة')">
+                    <img src="8.jpg" alt="الأزقة" class="w-full h-full object-cover rounded-2xl shadow-inner">
+                    <div class="img-tooltip"><i
+                            class="fa-solid fa-magnifying-glass-plus mb-2 block text-center text-4xl"></i> اضغط لتكبير
+                        الصورة</div>
+                </div>
+                <div class="lg:w-1/2 p-10 lg:p-14 flex flex-col justify-center">
+                    <div class="text-secondary mb-4"><i class="fa-solid fa-shield-halved text-3xl"></i></div>
+                    <h3
+                        class="text-4xl font-bold text-primary dark:text-white mb-6 border-r-4 border-secondary pr-4 font-heritage">
+                        حصون منيعة وعمارة عسكرية فطرية</h3>
+                    <p class="text-xl text-gray-700 dark:text-gray-300 leading-loose text-justify">
+                        هكذا كانت الأزقة قديماً؛ شوارع صُممت بحنكة وذكاء فطري لرجال أدركوا قيمة حماية العرض والأرض.
+                        بُنيت القرية لتكون <span class="text-gradient font-bold">قلعة حصينة وأسواراً منيعة</span> لا
+                        تُخترق. بيوتها متلاحمة ظهرها للخارج، وبواباتها الخشبية الضخمة كانت تغلق على مجتمع متماسك كالجسد
+                        الواحد. هذا التخطيط الدفاعي العبقري يعكس شجاعة الأجداد واستعدادهم الدائم للدفاع عن كرامتهم
+                        وقريتهم.
+                    </p>
+                </div>
+            </div>
+
+            <!-- بطاقة 4: الأحفاد -->
+            <div
+                class="flex flex-col lg:flex-row-reverse bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-800 mb-16 reveal hover:-translate-y-2 transition-transform duration-500">
+                <div class="lg:w-1/2 img-container bg-gray-100 dark:bg-gray-800 flex justify-center items-center p-2 interactive"
+                    onclick="openLightbox('10.jpg', 'جلسة الأحفاد')">
+                    <img src="10.jpg" alt="جلسة العائلة" class="w-full h-full object-cover rounded-2xl shadow-inner">
+                    <div class="img-tooltip"><i
+                            class="fa-solid fa-magnifying-glass-plus mb-2 block text-center text-4xl"></i> اضغط لتكبير
+                        الصورة</div>
+                </div>
+                <div class="lg:w-1/2 p-10 lg:p-14 flex flex-col justify-center">
+                    <div class="text-secondary mb-4"><i class="fa-solid fa-users text-3xl"></i></div>
+                    <h3
+                        class="text-4xl font-bold text-primary dark:text-white mb-6 border-r-4 border-secondary pr-4 font-heritage">
+                        دماء تتوارث المجد.. جلسة الأحفاد</h3>
+                    <p class="text-xl text-gray-700 dark:text-gray-300 leading-[2.2] text-justify">
+                        صورة تختزل الزمن؛ تجمع أحفاد العائلة الكريمة (أحفاد العمدة سليمان، العمدة حسانين، يوسف، حسن،
+                        إسماعيل، محمد، وعبدالمغيث رحمهم الله). هؤلاء الرجال <span class="text-gradient font-bold">يحملون
+                            في عروقهم جينات شرف النسب وعزة النفس</span>. ترى في وجوههم سيماء الصالحين وأخلاق الفرسان.
+                        جلستهم الأخوية أمام الرهبة هي رسالة بأن شجرة العائلة ما زالت تطرح ثمار الأصالة، وأن العهد الذي
+                        قطعه الأجداد محفوظ في صدور الأحفاد.
+                    </p>
+                </div>
+            </div>
+
+            <!-- بطاقة 5: المدخل الرئيسي (الصورة الجديدة 14.jpg) -->
+            <div
+                class="flex flex-col lg:flex-row bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-800 mb-16 reveal hover:-translate-y-2 transition-transform duration-500">
+                <div class="lg:w-1/2 img-container bg-gray-100 dark:bg-gray-800 flex justify-center items-center p-2 interactive"
+                    onclick="openLightbox('14.jpg', 'المدخل الرئيسي')">
+                    <img src="14.jpg" alt="المدخل الرئيسي" class="w-full h-full object-cover rounded-2xl shadow-inner">
+                    <div class="img-tooltip"><i
+                            class="fa-solid fa-magnifying-glass-plus mb-2 block text-center text-4xl"></i> اضغط لتكبير
+                        الصورة</div>
+                </div>
+                <div class="lg:w-1/2 p-10 lg:p-14 flex flex-col justify-center">
+                    <div class="text-secondary mb-4"><i class="fa-solid fa-archway text-3xl"></i></div>
+                    <h3
+                        class="text-4xl font-bold text-primary dark:text-white mb-6 border-r-4 border-secondary pr-4 font-heritage">
+                        بوابة التاريخ.. المدخل الرئيسي المنصرم</h3>
+                    <p class="text-xl text-gray-700 dark:text-gray-300 leading-[2.2] text-justify">
+                        صورة مهيبة توثق "المدخل الرئيسي" لعائلة زرازير. هذا المدخل كان بمثابة <span
+                            class="text-gradient font-bold">البوابة الحصينة التي تحرس تاريخ العائلة وتحتضن
+                            أمجادها</span>. ورغم ما تعرضت له هذه الجدران العتيقة من تدمير وهدم جزئي استجابةً لمقاييس
+                        مشاريع البنية التحتية الحديثة (مشروع الغاز)، إلا أن هذا الحدث كان السبب المباشر والعناية الإلهية
+                        التي أدت إلى الكشف عن الكنز المخبوء لإنقاذ "اللوحة التأسيسية" الخشبية من الضياع، ليتحول الهدم
+                        إلى فرصة لإحياء وتوثيق أمجاد الأجداد.
+                    </p>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ================= القسم الثالث: اللوحة والأثر ================= -->
+        <section id="artifact"
+            class="py-24 bg-gray-100 dark:bg-[#181818] border-y border-gray-300 dark:border-gray-800 transition-colors">
+            <div class="container mx-auto px-6 max-w-7xl">
+                <div class="text-center mb-20 reveal">
+                    <span class="text-secondary font-bold text-xl tracking-wider">إنقاذ الإرث</span>
+                    <h2 class="text-5xl md:text-6xl font-heritage font-bold text-primary dark:text-white mt-2 mb-6">
+                        اللوحة التأسيسية.. شاهد على العظمة</h2>
+                    <div class="w-32 h-2 bg-secondary mx-auto rounded-full mb-8"></div>
+                    <p class="text-2xl leading-loose text-gray-700 dark:text-gray-300 max-w-4xl mx-auto">
+                        في مشهد يحبس الأنفاس، وعقب هدم المدخل الرئيسي، تم إنقاذ وثيقة خشبية محفورة من براثن الضياع؛ لوحة
+                        العمدة "سليمان الحاج زرازير" المؤرخة بعام ١٢٧٢ هـ. إنها ليست مجرد خشب، بل هي شهادة ميلاد لتاريخ
+                        عريق.
+                    </p>
+                </div>
+
+                <!-- الفيديو -->
+                <div
+                    class="bg-white dark:bg-darkCard rounded-3xl shadow-2xl overflow-hidden mb-16 border border-gray-200 dark:border-gray-800 reveal">
+                    <div
+                        class="bg-gradient-to-r from-primary to-gray-900 text-white p-8 text-center border-b-4 border-secondary">
+                        <h3 class="text-3xl font-bold font-heritage"><i
+                                class="fa-solid fa-film text-secondary mr-2"></i> التوثيق المرئي: قراءة في خفايا الأثر
+                        </h3>
+                    </div>
+                    <div class="flex flex-col lg:flex-row">
+                        <div class="lg:w-1/2 bg-black flex items-center justify-center p-4">
+                            <video controls
+                                class="w-full h-auto max-h-[500px] object-contain rounded-xl shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+                                <source src="9.mp4" type="video/mp4">
+                                متصفحك لا يدعم الفيديو.
+                            </video>
+                        </div>
+                        <div class="lg:w-1/2 p-10 lg:p-14 flex flex-col justify-center">
+                            <p class="text-2xl text-gray-700 dark:text-gray-300 leading-[2.2] text-justify">
+                                يُوثق هذا المقطع اللحظات الحاسمة للوحة الخشبية التي تم إنقاذها بفضل يقظة الأحفاد. يبرز
+                                الفيديو المعالجة اللونية الدقيقة التي أزاحت غبار السنين لتكشف عن نقوش ذهبية تصرخ بالحق:
+                                <br><br>
+                                <span
+                                    class="block text-center text-3xl font-bold text-primary dark:text-white bg-yellow-100 dark:bg-yellow-900/30 px-6 py-4 rounded-xl mt-6 border border-secondary shadow-inner font-heritage leading-[2.2]">
+                                    "سنه ١٢٧٢ .... عبد الله سليمان زرازير ...<br>الحمد لله وحده لا شريك له"
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <!-- حمل اللوحة -->
+                    <div
+                        class="bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-800 reveal hover:shadow-2xl transition-shadow">
+                        <div class="h-80 img-container interactive"
+                            onclick="openLightbox('4.jpg', 'فخر الأحفاد بالتاريخ')">
+                            <img src="4.jpg" alt="حمل اللوحة" class="w-full h-full object-cover">
+                            <div class="img-tooltip"><i class="fa-solid fa-expand text-4xl"></i></div>
+                        </div>
+                        <div class="p-10">
+                            <h3 class="text-3xl font-bold text-primary dark:text-white mb-4 font-heritage">أكتاف تحمل
+                                إرثاً يزن جبالاً</h3>
+                            <p class="text-xl text-gray-700 dark:text-gray-300 leading-[2.2] text-justify">
+                                ثلاثة من فرسان العائلة يحملون اللوحة بكل فخر واعتزاز. لقد كان تدخلهم الشجاع سداً منيعاً
+                                ضد طمس الهوية. إنهم لا يحملون مجرد لوحة خشبية، بل <span
+                                    class="text-gradient font-bold">يحملون تاريخاً مجيداً، وتاجاً من الفخر</span>
+                                تتوارثه الأجيال. إنقاذ هذا الأثر الذي جاوز الـ 171 عاماً هو رسالة وفاء لا تُقدر بثمن
+                                لروح العمدة سليمان ولأجدادهم العظام.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- تفاصيل اللوحة -->
+                    <div
+                        class="bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-800 reveal hover:shadow-2xl transition-shadow">
+                        <div class="h-80 img-container interactive" onclick="openLightbox('5.jpg', 'نقوش تحدت الزمن')">
+                            <img src="5.jpg" alt="تفاصيل اللوحة" class="w-full h-full object-cover">
+                            <div class="img-tooltip"><i class="fa-solid fa-expand text-4xl"></i></div>
+                        </div>
+                        <div class="p-10">
+                            <h3 class="text-3xl font-bold text-primary dark:text-white mb-4 font-heritage">نقوش تحدت
+                                الزمن والرياح</h3>
+                            <p class="text-xl text-gray-700 dark:text-gray-300 leading-[2.2] text-justify">
+                                نظرة عن كثب تكشف عبقرية الحفر على الخشب. لم تكن هذه اللوحات توضع عبثاً، بل كانت <span
+                                    class="text-gradient font-bold">أختاماً للمكانة ورايات للسيادة</span> توضع على
+                                بوابات العظماء للتعريف بهم. صلابة الخشب وعمق النقش مكّنا هذا الأثر من الصمود في وجه
+                                قرنين من الزمان تقريباً، ليبقى شاهداً حياً على حضارة وثراء وتأثير عائلة زرازير في
+                                المنطقة بأسرها.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= القسم الرابع: الوثائق الرسمية ================= -->
+        <section id="docs" class="py-24 container mx-auto px-6 max-w-7xl">
+            <div class="text-center mb-20 reveal">
+                <span class="text-secondary font-bold text-xl tracking-wider">الإثبات القاطع</span>
+                <h2 class="text-5xl md:text-6xl font-heritage font-bold text-primary dark:text-white mt-2 mb-6">وثائق
+                    تنطق بالحق المكنون</h2>
+                <div class="w-32 h-2 bg-secondary mx-auto rounded-full mb-8"></div>
+                <p class="text-2xl leading-[2.2] text-gray-700 dark:text-gray-300 max-w-4xl mx-auto">
+                    حينما يتحول التاريخ الشفوي إلى يقين مادي! في توقيت إلهي، ظهرت سجلات محكمة طهطا الشرعية لتتطابق
+                    حرفياً مع الأثر الخشبي، وتوثق أسماء الأجداد بمداد من ذهب في دفاتر الحكومة.
+                </p>
+            </div>
+
+            <!-- وثيقة 1 -->
+            <div
+                class="flex flex-col lg:flex-row bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-800 mb-16 reveal">
+                <div class="lg:w-1/2 bg-[#f4ebd8] dark:bg-gray-800 flex items-center justify-center p-8 img-container interactive border-b lg:border-b-0 lg:border-l border-gray-300 dark:border-gray-700"
+                    onclick="openLightbox('1.jpg', 'غلاف سجل محكمة طهطا')">
+                    <img src="1.jpg" alt="غلاف السجل"
+                        class="max-w-full h-auto rounded shadow-lg border-2 border-primary/20">
+                    <div class="img-tooltip"><i class="fa-solid fa-search-plus text-4xl"></i></div>
+                </div>
+                <div class="lg:w-1/2 p-10 lg:p-14 flex flex-col justify-center">
+                    <div class="text-secondary mb-4"><i class="fa-solid fa-book-open text-3xl"></i></div>
+                    <h3
+                        class="text-4xl font-bold text-primary dark:text-white mb-6 border-r-4 border-secondary pr-4 font-heritage">
+                        غلاف السجل.. أرشيف العظماء</h3>
+                    <p class="text-xl text-gray-700 dark:text-gray-300 leading-[2.2] text-justify">
+                        هذا هو غلاف السجل التاريخي المخطوط ببراعة يد "عبدالرحمن أحمد الرفاعي". السجلات الشرعية لا تكذب
+                        ولا تُجامل؛ إنها تحفظ حقوق ومراكز العائلات ذات الشأن. هذا البيان الموثق للأوراق المحفوظة بمحكمة
+                        طهطا الشرعية (مديرية جرجا، عام ١٨٩٥م) يعكس <span class="text-gradient font-bold">الثقل الاجتماعي
+                            والقانوني للمنطقة</span>، ويُعد كنزاً وثائقياً يؤسس لسردية تاريخية مدعومة بالأدلة الرسمية
+                        الدامغة.
+                    </p>
+                </div>
+            </div>
+
+            <!-- وثيقة 2 -->
+            <div
+                class="flex flex-col lg:flex-row-reverse bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-800 mb-16 reveal">
+                <div class="lg:w-1/2 relative bg-[#f4ebd8] dark:bg-gray-800 flex items-center justify-center p-8 img-container interactive border-b lg:border-b-0 lg:border-r border-gray-300 dark:border-gray-700"
+                    onclick="openLightbox('2.jpg', 'إفادة حسانين زرازير')">
+                    <div
+                        class="absolute top-4 left-4 lg:right-4 lg:left-auto bg-gradient-to-l from-secondary to-yellow-600 text-white font-bold px-6 py-2 rounded-xl shadow-lg z-10 text-2xl font-heritage border border-yellow-300">
+                        <i class="fa-regular fa-calendar-check mr-2"></i> ١٣٠٢ هـ (١٨٨٤م)
+                    </div>
+                    <img src="2.jpg" alt="وثيقة حسانين زرازير"
+                        class="max-w-full h-auto rounded shadow-lg border-2 border-primary/20">
+                    <div class="img-tooltip"><i class="fa-solid fa-search-plus text-4xl"></i></div>
+                </div>
+                <div class="lg:w-1/2 p-10 lg:p-14 flex flex-col justify-center">
+                    <div class="text-secondary mb-4"><i class="fa-solid fa-file-signature text-3xl"></i></div>
+                    <h3
+                        class="text-4xl font-bold text-primary dark:text-white mb-6 border-r-4 border-secondary pr-4 font-heritage">
+                        نسب طاهر وأصل ثابت كالجبال</h3>
+                    <p class="text-xl text-gray-700 dark:text-gray-300 leading-[2.2] text-justify">
+                        هنا تبلغ المفاجأة ذروتها المذهلة! وثيقة رسمية مختومة تتضمن إفادة صريحة باسم <span
+                            class="text-gradient font-bold text-3xl">"حسانين زرازير"</span> من أعيان "تل الزوكي". حسانين
+                        هو شقيق العمدة سليمان، وكلاهما فرعان من شجرة الحاج زرازير الوارفة. هذا التطابق المذهل بين نقش
+                        الخشب (١٨٥٥م) وورق المحكمة (١٨٨٤م) يُعد <span class="text-gradient font-bold">إثباتاً لنسب طاهر،
+                            وأصلاً ثابتاً تضرب جذوره في أعماق التاريخ</span>، ليُخرس أي شك ويعلن عن سيادة تاريخية مؤكدة.
+                    </p>
+                </div>
+            </div>
+
+            <!-- وثيقة 3 -->
+            <div
+                class="flex flex-col lg:flex-row bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-800 reveal">
+                <div class="lg:w-1/2 relative bg-[#f4ebd8] dark:bg-gray-800 flex items-center justify-center p-8 img-container interactive border-b lg:border-b-0 lg:border-l border-gray-300 dark:border-gray-700"
+                    onclick="openLightbox('3.jpg', 'إثباتات إضافية')">
+                    <div
+                        class="absolute top-4 right-4 bg-gradient-to-l from-secondary to-yellow-600 text-white font-bold px-6 py-2 rounded-xl shadow-lg z-10 text-2xl font-heritage border border-yellow-300">
+                        <i class="fa-regular fa-calendar-check mr-2"></i> ١٣٠٣ هـ (١٨٨٥م)
+                    </div>
+                    <img src="3.jpg" alt="وثيقة إسماعيل إبراهيم"
+                        class="max-w-full h-auto rounded shadow-lg border-2 border-primary/20">
+                    <div class="img-tooltip"><i class="fa-solid fa-search-plus text-4xl"></i></div>
+                </div>
+                <div class="lg:w-1/2 p-10 lg:p-14 flex flex-col justify-center">
+                    <div class="text-secondary mb-4"><i class="fa-solid fa-stamp text-3xl"></i></div>
+                    <h3
+                        class="text-4xl font-bold text-primary dark:text-white mb-6 border-r-4 border-secondary pr-4 font-heritage">
+                        أدلة تتوالى لترسيخ الأمجاد</h3>
+                    <p class="text-xl text-gray-700 dark:text-gray-300 leading-[2.2] text-justify">
+                        لا تكتفي السجلات بدليل واحد، بل تقدم وثيقة أخرى في العام التالي (١٣٠٣ هـ) تفيد بتسديد معاملة تخص
+                        أحد رجال القرية ويُدعى <strong>"إسماعيل إبراهيم"</strong>. إن تواتر ذكر أهالي تل الزوكي في
+                        الدفاتر الرسمية يؤكد على <span class="text-gradient font-bold">الحيوية الاقتصادية والمكانة
+                            المرموقة التي كانت تتمتع بها القرية</span> تحت مظلة وإدارة عائلاتها الكبرى. إنها أمجاد لا
+                        تُنسى، سُجلت لتقرأها الأجيال بكل فخر.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= قسم الاقتباسات والأقوال ================= -->
+        <section class="py-20 bg-primary text-white text-center border-y-4 border-secondary relative overflow-hidden">
+            <div
+                class="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]">
+            </div>
+            <div class="container mx-auto px-6 relative z-10 reveal">
+                <i class="fa-solid fa-quote-right text-6xl text-secondary mb-6 opacity-50"></i>
+                <h3 class="text-3xl md:text-5xl font-heritage leading-[2.2] max-w-5xl mx-auto py-2 drop-shadow-md">
+                    "ليس الفتى من يقول كان أبي، بل الفتى من يحفظ مجد أبيه ويزيده رفعةً وسؤدداً. عائلة زرازير.. تاريخٌ
+                    كُتب ليُخلد، وأحفادٌ وُلدوا ليحملوا الراية."
+                </h3>
+            </div>
+        </section>
+
+        <!-- ================= قسم الأسئلة الشائعة (FAQ) ================= -->
+        <section class="py-24 container mx-auto px-6 max-w-4xl reveal">
+            <h2 class="text-4xl font-heritage font-bold text-primary dark:text-white text-center mb-12">أضواء على تاريخ
+                العائلة</h2>
+
+            <div class="space-y-4">
+                <div
+                    class="border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-darkCard overflow-hidden">
+                    <button
+                        class="faq-btn w-full px-6 py-4 text-right flex justify-between items-center focus:outline-none interactive">
+                        <span class="text-xl font-bold text-primary dark:text-white">إلى متى يعود تاريخ اللوحة
+                            المكتشفة؟</span>
+                        <i class="fa-solid fa-chevron-down text-secondary transition-transform duration-300"></i>
+                    </button>
+                    <div
+                        class="faq-content max-h-0 overflow-hidden transition-all duration-300 bg-gray-50 dark:bg-gray-800">
+                        <p class="p-6 text-lg text-gray-700 dark:text-gray-300 leading-[2]">يعود تاريخ اللوحة التأسيسية
+                            التي تم إنقاذها إلى عام ١٢٧٢ هجرية، الموافق تقريباً لعام ١٨٥٥ ميلادية، مما يعني أن عمرها
+                            يتجاوز الـ 171 عاماً.</p>
+                    </div>
+                </div>
+
+                <div
+                    class="border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-darkCard overflow-hidden">
+                    <button
+                        class="faq-btn w-full px-6 py-4 text-right flex justify-between items-center focus:outline-none interactive">
+                        <span class="text-xl font-bold text-primary dark:text-white">ما هي الأهمية التاريخية لوثائق
+                            محكمة طهطا؟</span>
+                        <i class="fa-solid fa-chevron-down text-secondary transition-transform duration-300"></i>
+                    </button>
+                    <div
+                        class="faq-content max-h-0 overflow-hidden transition-all duration-300 bg-gray-50 dark:bg-gray-800">
+                        <p class="p-6 text-lg text-gray-700 dark:text-gray-300 leading-[2]">تمثل هذه الوثائق إثباتاً
+                            رسمياً (حكومياً) لا يقبل الشك لأسماء أجداد العائلة وتاريخ تواجدهم ونفوذهم في القرية، مما
+                            يدعم الروايات المتوارثة والأدلة المادية كاللوحة الخشبية.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- الفوتر -->
+    <footer
+        class="bg-[#1a110c] text-white py-16 border-t-[8px] border-secondary mt-auto text-center relative overflow-hidden">
+        <div class="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')]">
+        </div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="mb-8">
+                <i class="fa-solid fa-fort-awesome text-5xl text-secondary mb-4"></i>
+                <h2 class="text-5xl font-heritage text-secondary">عائلة زرازير</h2>
+            </div>
+            <p class="text-2xl text-gray-300 max-w-3xl mx-auto mb-8 leading-[2.2] font-heritage">
+                التاريخ ليس مجرد ماضٍ نرويه، بل هو أمانة نحفظها في صدورنا، وتاج شرف نضعه على رؤوسنا، لنسلمه للأجيال
+                القادمة ليعرفوا جذورهم وأمجاد أجدادهم العظام.
+            </p>
+            <div class="flex justify-center space-x-6 space-x-reverse mb-8">
+                <span class="text-gray-400 font-bold"><i class="fa-solid fa-khanda text-secondary mx-1"></i>
+                    أصالة</span>
+                <span class="text-gray-400 font-bold"><i class="fa-solid fa-khanda text-secondary mx-1"></i>
+                    عراقة</span>
+                <span class="text-gray-400 font-bold"><i class="fa-solid fa-khanda text-secondary mx-1"></i> فخر</span>
+            </div>
+            <div class="w-full h-px bg-gray-800 my-8"></div>
+            <p class="text-gray-500 font-bold text-lg">
+                تم توثيق هذا الإرث بكل فخر واعتزاز &copy; منصة عائلة زرازير التوثيقية
+            </p>
+        </div>
+    </footer>
+
+    <!-- ================= شريط الأدوات العائم ================= -->
+    <div class="fixed bottom-6 left-6 flex flex-col gap-3 z-50">
+        <!-- زر الطباعة / PDF -->
+        <button onclick="window.print()"
+            class="interactive bg-blue-600 hover:bg-blue-700 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-xl transition-transform hover:scale-110 tooltip-container relative">
+            <i class="fa-solid fa-print"></i>
+        </button>
+        <!-- زر المشاركة -->
+        <button
+            class="interactive bg-green-600 hover:bg-green-700 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-xl transition-transform hover:scale-110">
+            <i class="fa-solid fa-share-nodes"></i>
+        </button>
+        <!-- زر الصعود للأعلى -->
+        <button id="scrollToTop"
+            class="interactive bg-secondary hover:bg-yellow-600 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-xl transition-all duration-300 transform scale-0 opacity-0">
+            <i class="fa-solid fa-arrow-up"></i>
+        </button>
+    </div>
+
+    <!-- ================= عارض الصور (Lightbox) ================= -->
+    <div id="lightbox" onclick="if(event.target.id === 'lightbox') closeLightbox()">
+        <!-- أزرار الإغلاق والتنزيل -->
+        <div class="absolute top-6 right-6 flex gap-4">
+            <!-- زر التنزيل -->
+            <a id="download-btn" href="#" download
+                class="bg-secondary hover:bg-yellow-600 text-white w-12 h-12 rounded-full flex items-center justify-center text-xl transition-transform hover:scale-110 shadow-lg interactive"
+                title="تنزيل الصورة">
+                <i class="fa-solid fa-download"></i>
+            </a>
+            <!-- زر الإغلاق -->
+            <button onclick="closeLightbox()"
+                class="bg-red-600 hover:bg-red-700 text-white w-12 h-12 rounded-full flex items-center justify-center text-2xl transition-transform hover:scale-110 shadow-lg interactive"
+                title="إغلاق">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <!-- عنوان الصورة داخل العارض -->
+        <h3 id="lightbox-caption"
+            class="text-white text-3xl font-heritage mb-6 drop-shadow-lg text-center mt-12 md:mt-0 leading-[2.2]"></h3>
+        <!-- الصورة -->
+        <img id="lightbox-img" src="" alt="">
+    </div>
+
+    <!-- ================= سكريبتات التفاعل والميزات الإضافية ================= -->
+    <script src="app.js"></script>
+    
+</body>
+
+</html>
