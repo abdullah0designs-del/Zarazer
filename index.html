@@ -13,6 +13,10 @@
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- مكتبة Panzoom للتحكم في تكبير وتصغير الشجرة -->
+    <script src="https://unpkg.com/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
+
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -101,9 +105,10 @@
         .family-tree {
             display: flex;
             justify-content: center;
-            overflow-x: auto;
             padding-bottom: 20px;
-            width: 100%;
+            width: max-content; /* ضروري عشان الشجرة تتمدد على راحتها داخل الحاوية */
+            min-width: 100%;
+            transform-origin: center top;
         }
         .family-tree ul {
             display: flex;
@@ -167,6 +172,7 @@
             position: relative;
             z-index: 2;
             min-width: max-content;
+            cursor: pointer;
         }
         .dark .family-tree-node { background: #1e1e1e; color: #fff; }
         .family-tree-node:hover { background: #b8860b; color: #fff; transform: scale(1.05); }
@@ -242,7 +248,7 @@
                 </h1>
                 <p class="text-2xl md:text-3xl max-w-5xl mx-auto leading-[2] font-medium text-gray-200 mt-6">
                     يا مراحب بيك في ديوان الكرم، في ضيافة رجالة وأحفاد <span class="text-secondary font-bold">الحاج زرازير أبوبكر الزوكي</span>.<br>
-                    حكاية سطرها الجدود بالدم والعرق، وورثوها للأحفاد عزة وكرامة في ربوع التل الزوكي، تاريخ يشرف أي حد وتتوارثه الأجيال جيل ورا جيل : كتابة و تصميم و تطوير عبدالله حسام 
+                    حكاية سطرها الجدود بالدم والعرق، وورثوها للأحفاد عزة وكرامة في ربوع التل الزوكي، تاريخ يشرف أي حد وتتوارثه الأجيال جيل ورا جيل:كتابة وتصميم و تطوير عبدالله حسام.
                 </p>
                 <div class="mt-12 flex flex-col sm:flex-row justify-center gap-4">
                     <a href="#village" class="bg-secondary hover:bg-yellow-600 text-white font-bold py-4 px-10 rounded-full shadow-[0_0_20px_rgba(184,134,11,0.5)] transform transition hover:-translate-y-2 text-xl interactive">
@@ -290,7 +296,7 @@
                 </p>
             </div>
 
-            <!-- بطاقة 1: الدوار -->
+            <!-- بطاقات القرية -->
             <div class="flex flex-col lg:flex-row bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-800 mb-16 reveal hover:-translate-y-2 transition-transform duration-500">
                 <div class="lg:w-1/2 img-container bg-gray-100 dark:bg-gray-800 flex justify-center items-center p-2 interactive" onclick="openLightbox('7.jpg', 'مضيفة العز ودوار الكرم')">
                     <img src="7.jpg" alt="دوار العائلة" class="w-full h-full object-cover rounded-2xl shadow-inner">
@@ -305,7 +311,6 @@
                 </div>
             </div>
 
-            <!-- بطاقة 2: الرهبة -->
             <div class="flex flex-col lg:flex-row-reverse bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-800 mb-16 reveal hover:-translate-y-2 transition-transform duration-500">
                 <div class="lg:w-1/2 img-container bg-gray-100 dark:bg-gray-800 flex justify-center items-center p-2 interactive" onclick="openLightbox('6.jpg', 'ساحة الرهبة')">
                     <img src="6.jpg" alt="الرهبة" class="w-full h-full object-cover rounded-2xl shadow-inner">
@@ -320,7 +325,6 @@
                 </div>
             </div>
 
-            <!-- بطاقة 3: الأزقة -->
             <div class="flex flex-col lg:flex-row bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-800 mb-16 reveal hover:-translate-y-2 transition-transform duration-500">
                 <div class="lg:w-1/2 img-container bg-gray-100 dark:bg-gray-800 flex justify-center items-center p-2 interactive" onclick="openLightbox('8.jpg', 'الحارات القديمة')">
                     <img src="8.jpg" alt="الأزقة" class="w-full h-full object-cover rounded-2xl shadow-inner">
@@ -335,7 +339,6 @@
                 </div>
             </div>
 
-            <!-- بطاقة 4: الأحفاد -->
             <div class="flex flex-col lg:flex-row-reverse bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-800 mb-16 reveal hover:-translate-y-2 transition-transform duration-500">
                 <div class="lg:w-1/2 img-container bg-gray-100 dark:bg-gray-800 flex justify-center items-center p-2 interactive" onclick="openLightbox('10.jpg', 'قعدة الرجالة')">
                     <img src="10.jpg" alt="جلسة العائلة" class="w-full h-full object-cover rounded-2xl shadow-inner">
@@ -350,7 +353,6 @@
                 </div>
             </div>
 
-            <!-- بطاقة 5: المدخل الرئيسي (الصورة 14.jpg) -->
             <div class="flex flex-col lg:flex-row bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-800 mb-16 reveal hover:-translate-y-2 transition-transform duration-500">
                 <div class="lg:w-1/2 img-container bg-gray-100 dark:bg-gray-800 flex justify-center items-center p-2 interactive" onclick="openLightbox('14.jpg', 'بوابة التاريخ')">
                     <img src="14.jpg" alt="المدخل الرئيسي" class="w-full h-full object-cover rounded-2xl shadow-inner">
@@ -404,7 +406,6 @@
 
                 <!-- بطاقات اللوحة -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                    <!-- حمل اللوحة -->
                     <div class="bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-800 reveal hover:shadow-2xl transition-shadow">
                         <div class="h-80 img-container interactive" onclick="openLightbox('4.jpg', 'رجالة شايلة تاريخ')">
                             <img src="4.jpg" alt="حمل اللوحة" class="w-full h-full object-cover">
@@ -418,7 +419,6 @@
                         </div>
                     </div>
 
-                    <!-- تفاصيل اللوحة -->
                     <div class="bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-800 reveal hover:shadow-2xl transition-shadow">
                         <div class="h-80 img-container interactive" onclick="openLightbox('5.jpg', 'حفر عاش سنين')">
                             <img src="5.jpg" alt="تفاصيل اللوحة" class="w-full h-full object-cover">
@@ -433,7 +433,6 @@
                     </div>
                 </div>
                 
-                <!-- تفاصيل بالطول للوحة (الصورة 15.jpg) -->
                 <div class="flex flex-col lg:flex-row bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-800 mt-12 reveal hover:-translate-y-2 transition-transform duration-500">
                     <div class="lg:w-1/2 img-container bg-gray-100 dark:bg-gray-800 flex justify-center items-center p-2 interactive" onclick="openLightbox('15.jpg', 'حفر الجدود اللي ما ينمحيش')">
                         <img src="15.jpg" alt="اللوحة بالطول" class="w-full h-full object-cover rounded-2xl shadow-inner max-h-[600px]">
@@ -461,7 +460,7 @@
                 </p>
             </div>
 
-            <!-- وثيقة 1 -->
+            <!-- وثائق الحكومة -->
             <div class="flex flex-col lg:flex-row bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-800 mb-16 reveal">
                 <div class="lg:w-1/2 bg-[#f4ebd8] dark:bg-gray-800 flex items-center justify-center p-8 img-container interactive border-b lg:border-b-0 lg:border-l border-gray-300 dark:border-gray-700" onclick="openLightbox('1.jpg', 'دفتر الحكومة')">
                     <img src="1.jpg" alt="غلاف السجل" class="max-w-full h-auto rounded shadow-lg border-2 border-primary/20">
@@ -476,7 +475,6 @@
                 </div>
             </div>
 
-            <!-- وثيقة 2 -->
             <div class="flex flex-col lg:flex-row-reverse bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-800 mb-16 reveal">
                 <div class="lg:w-1/2 relative bg-[#f4ebd8] dark:bg-gray-800 flex items-center justify-center p-8 img-container interactive border-b lg:border-b-0 lg:border-r border-gray-300 dark:border-gray-700" onclick="openLightbox('2.jpg', 'حجة حسانين زرازير')">
                     <div class="absolute top-4 left-4 lg:right-4 lg:left-auto bg-gradient-to-l from-secondary to-yellow-600 text-white font-bold px-6 py-2 rounded-xl shadow-lg z-10 text-2xl font-heritage border border-yellow-300">
@@ -494,7 +492,6 @@
                 </div>
             </div>
 
-            <!-- وثيقة 3 -->
             <div class="flex flex-col lg:flex-row bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-800 mb-16 reveal">
                 <div class="lg:w-1/2 relative bg-[#f4ebd8] dark:bg-gray-800 flex items-center justify-center p-8 img-container interactive border-b lg:border-b-0 lg:border-l border-gray-300 dark:border-gray-700" onclick="openLightbox('3.jpg', 'ورقة إسماعيل إبراهيم')">
                     <div class="absolute top-4 right-4 bg-gradient-to-l from-secondary to-yellow-600 text-white font-bold px-6 py-2 rounded-xl shadow-lg z-10 text-2xl font-heritage border border-yellow-300">
@@ -512,7 +509,6 @@
                 </div>
             </div>
 
-            <!-- وثيقة 4 (11.jpg) -->
             <div class="flex flex-col lg:flex-row-reverse bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-800 mb-16 reveal">
                 <div class="lg:w-1/2 relative bg-[#f4ebd8] dark:bg-gray-800 flex items-center justify-center p-8 img-container interactive border-b lg:border-b-0 lg:border-r border-gray-300 dark:border-gray-700" onclick="openLightbox('11.jpg', 'كشف عمد طما ١٨٨٢م')">
                     <div class="absolute top-4 left-4 lg:right-4 lg:left-auto bg-gradient-to-l from-secondary to-yellow-600 text-white font-bold px-6 py-2 rounded-xl shadow-lg z-10 text-2xl font-heritage border border-yellow-300">
@@ -530,7 +526,6 @@
                 </div>
             </div>
 
-            <!-- وثيقة 5 (12.jpg) -->
             <div class="flex flex-col lg:flex-row bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-800 mb-16 reveal">
                 <div class="lg:w-1/2 relative bg-[#f4ebd8] dark:bg-gray-800 flex items-center justify-center p-8 img-container interactive border-b lg:border-b-0 lg:border-l border-gray-300 dark:border-gray-700" onclick="openLightbox('12.jpg', 'مخطوطة الأختام')">
                     <img src="12.jpg" alt="مخطوطة الأختام" class="max-w-full h-auto rounded shadow-lg border-2 border-primary/20">
@@ -545,7 +540,6 @@
                 </div>
             </div>
 
-            <!-- وثيقة 6 (13.jpg) -->
             <div class="flex flex-col lg:flex-row-reverse bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-800 mb-16 reveal">
                 <div class="lg:w-1/2 relative bg-[#f4ebd8] dark:bg-gray-800 flex items-center justify-center p-8 img-container interactive border-b lg:border-b-0 lg:border-r border-gray-300 dark:border-gray-700" onclick="openLightbox('13.jpg', 'أختام الأجداد')">
                     <img src="13.jpg" alt="زوم الأختام" class="max-w-full h-auto rounded shadow-lg border-2 border-primary/20">
@@ -573,7 +567,7 @@
             </div>
         </section>
         
-        <!-- ================= قسم شجرة العائلة (الهرمية) ================= -->
+        <!-- ================= قسم شجرة العائلة (الهرمية مع Panzoom) ================= -->
         <section id="family-tree-section" class="py-24 bg-[#fdfbf7] dark:bg-[#121212] border-y-[8px] border-secondary relative overflow-hidden transition-colors">
             <div class="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')]"></div>
             <div class="container mx-auto px-4 md:px-6 relative z-10">
@@ -589,14 +583,28 @@
                     </button>
                 </div>
 
-                <!-- الهيكل الشجري الهرمي -->
-                <div id="approved-members-list" class="family-tree" dir="rtl">
-                    <!-- رسالة في حال عدم الاتصال بقاعدة البيانات -->
-                    <div class="text-center text-secondary font-bold text-xl w-full" id="tree-loading">
-                        <i class="fa-solid fa-spinner fa-spin text-3xl mb-2"></i><br>
-                        بنجيب المخطوطة من الدفاتر...
+                <!-- حاوية الشجرة القابلة للتكبير والسحب -->
+                <div class="relative w-full border-[6px] border-secondary/50 rounded-2xl bg-white dark:bg-darkCard overflow-hidden shadow-2xl h-[70vh] reveal">
+                    
+                    <!-- أزرار التحكم في الشجرة (زوم) -->
+                    <div class="absolute bottom-4 left-4 z-20 flex flex-col gap-2">
+                        <button id="zoomInBtn" class="bg-secondary text-white w-12 h-12 rounded-full shadow-lg hover:bg-yellow-600 font-bold text-2xl interactive flex justify-center items-center"><i class="fa-solid fa-plus"></i></button>
+                        <button id="zoomOutBtn" class="bg-secondary text-white w-12 h-12 rounded-full shadow-lg hover:bg-yellow-600 font-bold text-2xl interactive flex justify-center items-center"><i class="fa-solid fa-minus"></i></button>
+                        <button id="zoomResetBtn" class="bg-primary text-white w-12 h-12 rounded-full shadow-lg hover:bg-gray-800 font-bold text-xl interactive flex justify-center items-center"><i class="fa-solid fa-expand"></i></button>
+                    </div>
+
+                    <!-- منطقة السحب والتكبير -->
+                    <div id="tree-wrapper" class="w-full h-full cursor-move" style="touch-action: none;">
+                        <div id="approved-members-list" class="family-tree" dir="rtl">
+                            <!-- رسالة التحميل -->
+                            <div class="text-center text-secondary font-bold text-xl w-full mt-20" id="tree-loading">
+                                <i class="fa-solid fa-spinner fa-spin text-3xl mb-2"></i><br>
+                                بنجيب المخطوطة من الدفاتر...
+                            </div>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </section>
 
@@ -679,7 +687,7 @@
                     </div>
                 </div>
                 <button type="submit" id="submitBtn" class="w-full mt-8 bg-secondary hover:bg-yellow-600 text-white font-bold py-3 rounded-xl shadow-lg transition-colors text-xl font-heritage interactive">
-                 ارفع الورقة  <i class="fa-solid fa-paper-plane mr-2"></i>
+                    ارفع الورقة  <i class="fa-solid fa-paper-plane mr-2"></i>
                 </button>
                 <div id="submitMsg" class="mt-4 text-center font-bold hidden"></div>
             </form>
@@ -872,7 +880,7 @@
         });
     </script>
 
-    <!-- ================= إعدادات وأكواد Firebase ================= -->
+    <!-- ================= إعدادات وأكواد Firebase و Panzoom ================= -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
@@ -896,6 +904,7 @@
 
         let currentUser = null;
         let allTreeData = [];
+        let pzInstance = null; // متغير لمكتبة التكبير والتصغير
 
         // تسجيل الدخول لحماية القاعدة
         const initAuth = async () => {
@@ -947,12 +956,10 @@
             const root = { name: "الحاج زرازير أبوبكر الزوكي", children: {} };
             
             docs.forEach(doc => {
-                // تنظيف الاسم وإزالة كلمة بن
                 let cleanName = doc.fullName.trim().replace(/\s+بن\s+/g, " ").replace(/\s+ابن\s+/g, " ");
                 let words = cleanName.split(/\s+/);
                 let names = [];
                 
-                // دمج الأسماء المركبة مثل (عبد الله، أبو بكر) لتصبح كلمة واحدة في الشجرة
                 for (let i = 0; i < words.length; i++) {
                     if ((words[i] === "عبد" || words[i] === "ابو" || words[i] === "أبو") && i + 1 < words.length) {
                         names.push(words[i] + " " + words[i+1]);
@@ -961,16 +968,11 @@
                         names.push(words[i]);
                     }
                 }
-                
-                // قلب المصفوفة ليبدأ من الجد وينتهي بالابن
                 names.reverse();
-                
-                // تجاهل اسم زرازير إذا كتبه المستخدم في النهاية، لأن الجذر موجود بالفعل
                 if (names.length > 0 && names[0].includes("زرازير")) {
                     names.shift();
                 }
                 
-                // بناء الشجرة وربط العقد ببعضها
                 let currentNode = root;
                 names.forEach((name) => {
                     if (!currentNode.children[name]) {
@@ -986,7 +988,7 @@
         function generateTreeHtml(node, isRoot = false) {
             let html = '<li>';
             if(isRoot) {
-                html += `<div class="family-tree-node !bg-gradient-to-b !from-secondary !to-yellow-700 !text-white !border-4 !border-white dark:!border-gray-800 shadow-xl px-8 py-4 mb-4"><i class="fa-solid fa-crown text-2xl mb-2 text-yellow-200 block"></i>${node.name}</div>`;
+                html += `<div class="family-tree-node !bg-gradient-to-b !from-secondary !to-yellow-700 !text-white !border-4 !border-white dark:!border-gray-800 shadow-xl px-8 py-4 mb-4"><i class="fa-solid fa-crown text-2xl mb-2 text-yellow-200 block text-center"></i>${node.name}</div>`;
             } else {
                 html += `<div class="family-tree-node">${node.name}</div>`;
             }
@@ -1003,7 +1005,31 @@
             return html;
         }
 
-        // ================================================================
+        // دالة احترافية لضبط الشجرة لتظهر بالكامل داخل الشاشة
+        function fitTreeToScreen() {
+            if(!pzInstance) return;
+            const elem = document.getElementById('approved-members-list');
+            const wrapper = document.getElementById('tree-wrapper');
+            
+            // عمل ريست للزوم عشان نحسب المقاس الحقيقي
+            pzInstance.reset();
+
+            const contentWidth = elem.scrollWidth;
+            const wrapperWidth = wrapper.clientWidth;
+            
+            let targetScale = 1;
+            // لو الشجرة أعرض من الشاشة، صغرها بنسبة 95% من مساحة الشاشة عشان تظهر كاملة
+            if (contentWidth > wrapperWidth) {
+                targetScale = (wrapperWidth / contentWidth) * 0.95; 
+                if (targetScale < 0.1) targetScale = 0.1;
+            }
+            
+            // تطبيق الزوم مع تحريك الشجرة للوسط تقريباً
+            pzInstance.zoom(targetScale, { animate: true });
+            setTimeout(() => {
+                pzInstance.pan(0, 30); // نزول الشجرة 30 بيكسل عشان الرأس متختفيش
+            }, 50);
+        }
 
         function startListening() {
             onSnapshot(getTreeCollection(), (snapshot) => {
@@ -1045,11 +1071,31 @@
                 return;
             }
 
-            // تطبيق الخوارزمية وتوليد الـ HTML
             const hierarchicalTree = buildHierarchyTree(approvedDocs);
             const treeHtml = `<ul>${generateTreeHtml(hierarchicalTree, true)}</ul>`;
             
             treeContainer.innerHTML = treeHtml;
+
+            // تشغيل مكتبة التقريب والتبعيد (Panzoom) بعد تحميل الشجرة
+            setTimeout(() => {
+                const wrapper = document.getElementById('tree-wrapper');
+                if (!pzInstance) {
+                    pzInstance = Panzoom(treeContainer, {
+                        maxScale: 3,
+                        minScale: 0.1,
+                        startScale: 1,
+                        canvas: true
+                    });
+                    
+                    wrapper.addEventListener('wheel', pzInstance.zoomWithWheel);
+
+                    document.getElementById('zoomInBtn').addEventListener('click', pzInstance.zoomIn);
+                    document.getElementById('zoomOutBtn').addEventListener('click', pzInstance.zoomOut);
+                    document.getElementById('zoomResetBtn').addEventListener('click', fitTreeToScreen);
+                }
+                // تصغير الشجرة تلقائيا لتناسب شاشة الهاتف
+                fitTreeToScreen();
+            }, 100);
         }
 
         function renderPendingList() {
