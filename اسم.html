@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ديوان عائلة زرازير | حكاية العز والبقاء</title>
+    
+    <!-- خطوط جوجل -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- مكتبة الأيقونات FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cairo: ['"Cairo"', 'sans-serif'],
+                        amiri: ['"Amiri"', 'serif'],
+                    },
+                    colors: {
+                        primary: '#2c1e16',
+                        secondary: '#b8860b',
+                        surface: '#faf8f5',
+                        darkBg: '#121212',
+                        darkCard: '#1e1e1e',
+                    },
+                    animation: {
+                        'spin-slow': 'spin 8s linear infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* التنسيقات الأساسية */
+        body { font-family: 'Cairo', sans-serif; background-color: #faf8f5; color: #2c1e16; line-height: 1.9; overflow-x: hidden; }
+        .dark body { background-color: #121212; color: #e5e5e5; }
+        h1, h2, h3, h4, .font-heritage { font-family: 'Amiri', serif; }
+        
+        /* مؤشر الماوس المخصص */
+        * { cursor: none; }
+        /* استثناء حقول الإدخال لتظهر علامة الكتابة الطبيعية */
+        input, textarea { cursor: text !important; }
+        
+        /* رفع z-index للماوس ليكون فوق النوافذ المنبثقة */
+        .custom-cursor { position: fixed; top: 0; left: 0; width: 20px; height: 20px; border: 2px solid #b8860b; border-radius: 50%; pointer-events: none; z-index: 100002; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s, background-color 0.2s; }
+        .custom-cursor-dot { position: fixed; top: 0; left: 0; width: 6px; height: 6px; background-color: #b8860b; border-radius: 50%; pointer-events: none; z-index: 100003; transform: translate(-50%, -50%); }
+        .hovered-cursor { width: 40px; height: 40px; background-color: rgba(184, 134, 11, 0.1); }
+
+        /* شريط التمرير */
+        ::-webkit-scrollbar { width: 10px; height: 10px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        .dark ::-webkit-scrollbar-track { background: #2d2d2d; }
+        ::-webkit-scrollbar-thumb { background: #b8860b; border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: #8a6508; }
+
+        /* شريط تقدم القراءة */
+        #progress-bar { position: fixed; top: 0; right: 0; height: 4px; background: linear-gradient(to left, #b8860b, #ffd700); z-index: 1000; width: 0%; transition: width 0.1s; }
+
+        /* تأثيرات الزجاج */
+        .glass-nav { background: rgba(44, 30, 22, 0.9); backdrop-filter: blur(10px); }
+        .dark .glass-nav { background: rgba(18, 18, 18, 0.9); border-bottom-color: #b8860b; }
+
+        /* التلميحات (Tooltips) على الصور */
+        .img-container { position: relative; overflow: hidden; cursor: none; }
+        .img-container img { transition: transform 0.5s ease; }
+        .img-container:hover img { transform: scale(1.05); }
+        .img-tooltip { position: absolute; inset: 0; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease; color: #fff; font-size: 1.5rem; font-weight: bold; }
+        .img-container:hover .img-tooltip { opacity: 1; }
+
+        /* حركات الظهور عند التمرير (Reveal) */
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        
+        /* تدرج لوني للنصوص الهامة */
+        .text-gradient { background: linear-gradient(to left, #b8860b, #8a6508); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .dark .text-gradient { background: linear-gradient(to left, #ffd700, #b8860b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        /* شاشة التحميل */
+        #preloader { position: fixed; inset: 0; background-color: #2c1e16; z-index: 99999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease; }
+        .loader-ring { width: 80px; height: 80px; border: 4px solid rgba(184, 134, 11, 0.3); border-top-color: #b8860b; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* عارض الصور (Lightbox) */
+        #lightbox { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.95); z-index: 100000; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s; }
+        #lightbox.show { display: flex; opacity: 1; }
+        #lightbox-img { max-width: 90%; max-height: 80vh; border: 4px solid #b8860b; border-radius: 8px; box-shadow: 0 0 30px rgba(184, 134, 11, 0.3); }
+
+        /* نوافذ منبثقة (Modals) */
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 100001; justify-content: center; align-items: center; padding: 20px; }
+        .modal.show { display: flex; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+
+        /* ================= تصميم شجرة العائلة الهرمية (Org Chart) ================= */
+        .family-tree {
+            display: flex;
+            justify-content: center;
+            overflow-x: auto;
+            padding-bottom: 20px;
+            width: 100%;
+        }
+        .family-tree ul {
+            display: flex;
+            padding-top: 30px;
+            position: relative;
+        }
+        .family-tree li {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            padding: 30px 10px 0 10px;
+        }
+        /* الخطوط الأفقية التي تربط الأبناء */
+        .family-tree li::before, .family-tree li::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 30px;
+            border-top: 2px solid #b8860b;
+        }
+        .family-tree li::before { right: 0; }
+        .family-tree li::after { left: 0; }
+
+        /* إخفاء نصف الخط للعنصر الأول والأخير لمنع التمدد الزائد (مع مراعاة الـ RTL) */
+        .family-tree li:first-child::before { border: 0 none; }
+        .family-tree li:first-child::after { border-radius: 8px 0 0 0; }
+        .family-tree li:last-child::after { border: 0 none; }
+        .family-tree li:last-child::before { border-radius: 0 8px 0 0; }
+
+        /* العقدة الوحيدة لا تحتاج لخطوط أفقية */
+        .family-tree li:only-child::before,
+        .family-tree li:only-child::after { display: none; }
+
+        /* الخط العمودي النازل من الأب */
+        .family-tree ul ul::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 0;
+            height: 30px;
+            border-left: 2px solid #b8860b;
+            transform: translateX(-50%);
+        }
+
+        /* تنسيق صندوق الاسم */
+        .family-tree-node {
+            border: 2px solid #b8860b;
+            padding: 12px 25px;
+            text-decoration: none;
+            color: #2c1e16;
+            font-family: 'Amiri', serif;
+            font-size: 20px;
+            font-weight: bold;
+            border-radius: 12px;
+            background: #fff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+            min-width: max-content;
+        }
+        .dark .family-tree-node { background: #1e1e1e; color: #fff; }
+        .family-tree-node:hover { background: #b8860b; color: #fff; transform: scale(1.05); }
+
+        /* الخط العمودي النازل من صندوق الاسم نفسه */
+        .family-tree li > div.family-tree-node { position: relative; margin-top: 20px; }
+        .family-tree li > div.family-tree-node::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            width: 0;
+            height: 20px;
+            border-left: 2px solid #b8860b;
+        }
+        /* إخفاء الخط العمودي للجد الأكبر (الجذر) */
+        .family-tree > ul > li > div.family-tree-node::before { display: none; }
+        .family-tree > ul > li { padding-top: 0; margin-top: 0; }
+        .family-tree > ul > li > div.family-tree-node { margin-top: 0; }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen transition-colors duration-300 relative">
+
+    <!-- شاشة التحميل -->
+    <div id="preloader">
+        <div class="loader-ring mb-4"></div>
+        <h2 class="font-heritage text-3xl text-secondary">عائلة زرازير</h2>
+        <p class="text-gray-400 mt-2 font-cairo text-lg">بنجهزلك ديوان العيلة يا غالي، اصبر هبابة...</p>
+    </div>
+
+    <!-- مؤشر الماوس -->
+    <div class="custom-cursor" id="cursor"></div>
+    <div class="custom-cursor-dot" id="cursor-dot"></div>
+
+    <!-- شريط تقدم القراءة -->
+    <div id="progress-bar"></div>
+
+    <!-- شريط التنقل -->
+    <nav class="glass-nav text-white sticky top-0 z-50 shadow-lg border-b-4 border-secondary transition-colors duration-300">
+        <div class="container mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center">
+            <div class="text-3xl font-heritage font-bold text-secondary mb-4 md:mb-0 flex items-center gap-3">
+                <i class="fa-solid fa-fort-awesome"></i> عائلة زرازير
+            </div>
+            <div class="flex items-center space-x-6 space-x-reverse">
+                <div class="hidden lg:flex space-x-6 space-x-reverse text-lg font-semibold">
+                    <a href="#hero" class="hover:text-secondary transition-colors interactive">الديوان</a>
+                    <a href="#village" class="hover:text-secondary transition-colors interactive">أصل البلد</a>
+                    <a href="#artifact" class="hover:text-secondary transition-colors interactive">أثر الجدود</a>
+                    <a href="#docs" class="hover:text-secondary transition-colors interactive">ورق الحكومة</a>
+                    <a href="#family-tree-section" class="text-secondary border-b-2 border-secondary hover:text-white transition-colors interactive">شجرة العيلة</a>
+                </div>
+                <!-- زر الوضع الليلي -->
+                <button id="theme-toggle" class="interactive bg-gray-700 hover:bg-secondary text-white p-2 rounded-full transition-colors w-10 h-10 flex items-center justify-center">
+                    <i class="fa-solid fa-moon" id="theme-icon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- المحتوى الرئيسي -->
+    <main class="flex-grow">
+        
+        <!-- ================= القسم الأول: البانر ================= -->
+        <section id="hero" class="relative py-32 overflow-hidden border-b-[10px] border-secondary bg-primary">
+            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')] opacity-10 animation-spin-slow"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/60"></div>
+            <div class="container mx-auto px-6 text-center relative z-10 reveal">
+                <div class="inline-block border-2 border-secondary px-8 py-2 rounded-full mb-8 text-xl font-bold text-secondary bg-black/30 backdrop-blur-sm shadow-lg">
+                    <i class="fa-solid fa-scroll ml-2"></i> ١٨٥٥ م - ١٢٧٢ هـ
+                </div>
+                <h1 class="text-6xl md:text-8xl font-heritage font-bold mb-6 text-white drop-shadow-lg">
+                    حـكـايـة العـز والـبـقـاء
+                </h1>
+                <p class="text-2xl md:text-3xl max-w-5xl mx-auto leading-[2] font-medium text-gray-200 mt-6">
+                    يا مراحب بيك في ديوان الكرم، في ضيافة رجالة وأحفاد <span class="text-secondary font-bold">الحاج زرازير أبوبكر الزوكي</span>.<br>
+                    حكاية سطرها الجدود بالدم والعرق، وورثوها للأحفاد عزة وكرامة في ربوع التل الزوكي، تاريخ يشرف أي حد وتتوارثه الأجيال جيل ورا جيل.
+                </p>
+                <div class="mt-12 flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="#village" class="bg-secondary hover:bg-yellow-600 text-white font-bold py-4 px-10 rounded-full shadow-[0_0_20px_rgba(184,134,11,0.5)] transform transition hover:-translate-y-2 text-xl interactive">
+                        اقرط على الحكاية وشوف <i class="fa-solid fa-arrow-down mr-2"></i>
+                    </a>
+                    <a href="#family-tree-section" class="bg-transparent border-2 border-secondary hover:bg-secondary text-white font-bold py-4 px-10 rounded-full shadow-lg transform transition hover:-translate-y-2 text-xl interactive">
+                        سجل اسمك في الشجرة <i class="fa-solid fa-tree mr-2"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= قسم الإحصائيات ================= -->
+        <section class="py-12 bg-white dark:bg-darkCard border-b border-gray-200 dark:border-gray-800 transition-colors">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center reveal">
+                    <div>
+                        <div class="text-4xl md:text-5xl font-bold text-secondary mb-2 counter" data-target="171">0</div>
+                        <div class="text-lg font-bold text-gray-600 dark:text-gray-400">سنة واليافطة صامدة</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl md:text-5xl font-bold text-secondary mb-2 counter" data-target="1855">0</div>
+                        <div class="text-lg font-bold text-gray-600 dark:text-gray-400">سنة الدق على الخشب</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl md:text-5xl font-bold text-secondary mb-2 counter" data-target="1884">0</div>
+                        <div class="text-lg font-bold text-gray-600 dark:text-gray-400">سنة ختم المحكمة</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl md:text-5xl font-bold text-secondary mb-2"><i class="fa-solid fa-infinity"></i></div>
+                        <div class="text-lg font-bold text-gray-600 dark:text-gray-400">تاريخ أصل وعز مايخلصش</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= القسم الثاني: القرية والمعالم ================= -->
+        <section id="village" class="py-24 container mx-auto px-6 max-w-7xl">
+            <div class="text-center mb-20 reveal">
+                <span class="text-secondary font-bold text-xl tracking-wider">الأصل والمطرح</span>
+                <h2 class="text-5xl md:text-6xl font-heritage font-bold text-primary dark:text-white mt-2 mb-6">القرية وشواهد العز القديم</h2>
+                <div class="w-32 h-2 bg-secondary mx-auto rounded-full mb-8"></div>
+                <p class="text-2xl leading-loose text-gray-700 dark:text-gray-300 max-w-4xl mx-auto">
+                    في أقصى شمال شرق بلاد الهلة، تتربع قريتنا "التل الزوكي" زي القلعة الحصينة. مبنية على المرجلة والكرم، حيطانها شايلة شرف رجالها، ودروبها بتشهد على حكايات العز اللي ما تتنسيش.
+                </p>
+            </div>
+
+            <!-- بطاقة 1: الدوار -->
+            <div class="flex flex-col lg:flex-row bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-800 mb-16 reveal hover:-translate-y-2 transition-transform duration-500">
+                <div class="lg:w-1/2 img-container bg-gray-100 dark:bg-gray-800 flex justify-center items-center p-2 interactive" onclick="openLightbox('7.jpg', 'مضيفة العز ودوار الكرم')">
+                    <img src="7.jpg" alt="دوار العائلة" class="w-full h-full object-cover rounded-2xl shadow-inner">
+                    <div class="img-tooltip"><i class="fa-solid fa-magnifying-glass-plus mb-2 block text-center text-4xl"></i> كبر الصورة يا غالي</div>
+                </div>
+                <div class="lg:w-1/2 p-10 lg:p-14 flex flex-col justify-center">
+                    <div class="text-secondary mb-4"><i class="fa-solid fa-house-chimney text-3xl"></i></div>
+                    <h3 class="text-4xl font-bold text-primary dark:text-white mb-6 border-r-4 border-secondary pr-4 font-heritage">مضيفة العز ودوار الكرم</h3>
+                    <p class="text-xl text-gray-700 dark:text-gray-300 leading-[2.2] text-justify">
+                        الدوار ده يا ولدي مش حيطان مبنية وخلاص، ده <span class="text-gradient font-bold">حضن بيلم العيلة، ومضيفة مفتوحة للغريب قبل القريب</span>. دوار عيلة زرازير هو القلب النابض للبلد، بيبانه ما بتتقفلش في وش ضيف. جواه قعد كبارات البلد يحلوا ويربطوا، وفيه اتربى الصغير على احترام الكبير. الدوار ده شاهد على صواني الأكل اللي بتطلع للكريم والمحتاج، ومقعد الرجالة اللي كلمتهم سيف على رقبتهم.
+                    </p>
+                </div>
+            </div>
+
+            <!-- بطاقة 2: الرهبة -->
+            <div class="flex flex-col lg:flex-row-reverse bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-800 mb-16 reveal hover:-translate-y-2 transition-transform duration-500">
+                <div class="lg:w-1/2 img-container bg-gray-100 dark:bg-gray-800 flex justify-center items-center p-2 interactive" onclick="openLightbox('6.jpg', 'ساحة الرهبة')">
+                    <img src="6.jpg" alt="الرهبة" class="w-full h-full object-cover rounded-2xl shadow-inner">
+                    <div class="img-tooltip"><i class="fa-solid fa-magnifying-glass-plus mb-2 block text-center text-4xl"></i> كبر الصورة يا غالي</div>
+                </div>
+                <div class="lg:w-1/2 p-10 lg:p-14 flex flex-col justify-center">
+                    <div class="text-secondary mb-4"><i class="fa-solid fa-mosque text-3xl"></i></div>
+                    <h3 class="text-4xl font-bold text-primary dark:text-white mb-6 border-r-4 border-secondary pr-4 font-heritage">ساحة الرهبة.. مطرح البركة واللمة</h3>
+                    <p class="text-xl text-gray-700 dark:text-gray-300 leading-[2.2] text-justify">
+                        ساحة الرهبة دي مطرح البركة، ريحة الجدود الطيبة فايحة فيها. "الرهبة" مش مجرد براح فاضي، دي <span class="text-gradient font-bold">مكان الصلح والصفا واللمة الزينة</span>. هنا جمب الجامع، بتتوزن الكلمة بميزان الذهب، وهنا بتخلص القعدات العرفية بالتراضي والمحبة. الساحة دي شافت عهود اتقطعت على كتاب الله بين رجالة تخاف ربها وتصون حق الجار، وتفدي البلد بالروح.
+                    </p>
+                </div>
+            </div>
+
+            <!-- بطاقة 3: الأزقة -->
+            <div class="flex flex-col lg:flex-row bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-800 mb-16 reveal hover:-translate-y-2 transition-transform duration-500">
+                <div class="lg:w-1/2 img-container bg-gray-100 dark:bg-gray-800 flex justify-center items-center p-2 interactive" onclick="openLightbox('8.jpg', 'الحارات القديمة')">
+                    <img src="8.jpg" alt="الأزقة" class="w-full h-full object-cover rounded-2xl shadow-inner">
+                    <div class="img-tooltip"><i class="fa-solid fa-magnifying-glass-plus mb-2 block text-center text-4xl"></i> كبر الصورة يا غالي</div>
+                </div>
+                <div class="lg:w-1/2 p-10 lg:p-14 flex flex-col justify-center">
+                    <div class="text-secondary mb-4"><i class="fa-solid fa-shield-halved text-3xl"></i></div>
+                    <h3 class="text-4xl font-bold text-primary dark:text-white mb-6 border-r-4 border-secondary pr-4 font-heritage">حارات وبيوت سَد منيع</h3>
+                    <p class="text-xl text-gray-700 dark:text-gray-300 leading-[2.2] text-justify">
+                        بص يا ولدي للحارات دي، البلد زمان ماكانتش سايبة، دي كانت مبنية بذكاء بالفطرة عشان تحمي العِرض والأرض. بيوتها <span class="text-gradient font-bold">سد منيع زي القلعة</span>، ضهر البيت لبرة عشان يحمي من الغريب، والبوابات خشب تقيل يقفل على الناس بالليل كأنهم عيلة واحدة. الرجالة زمان كانوا بيبنوا بيوتهم تحصين وحماية، كل طوبة فيها بتقول إننا هنا قاعدين ومتربعين، ولا حد يقدر يهوب ناحيتنا.
+                    </p>
+                </div>
+            </div>
+
+            <!-- بطاقة 4: الأحفاد -->
+            <div class="flex flex-col lg:flex-row-reverse bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-800 mb-16 reveal hover:-translate-y-2 transition-transform duration-500">
+                <div class="lg:w-1/2 img-container bg-gray-100 dark:bg-gray-800 flex justify-center items-center p-2 interactive" onclick="openLightbox('10.jpg', 'قعدة الرجالة')">
+                    <img src="10.jpg" alt="جلسة العائلة" class="w-full h-full object-cover rounded-2xl shadow-inner">
+                    <div class="img-tooltip"><i class="fa-solid fa-magnifying-glass-plus mb-2 block text-center text-4xl"></i> كبر الصورة يا غالي</div>
+                </div>
+                <div class="lg:w-1/2 p-10 lg:p-14 flex flex-col justify-center">
+                    <div class="text-secondary mb-4"><i class="fa-solid fa-users text-3xl"></i></div>
+                    <h3 class="text-4xl font-bold text-primary dark:text-white mb-6 border-r-4 border-secondary pr-4 font-heritage">قعدة الرجالة وأحفاد الأصول</h3>
+                    <p class="text-xl text-gray-700 dark:text-gray-300 leading-[2.2] text-justify">
+                        الصورة دي بتلخص الحكاية؛ دول أحفاد العيلة الكريمة، ولاد العمدة سليمان والعمدة حسانين ويوسف وحسن وإسماعيل ومحمد وعبدالمغيث، الله يرحمهم جميعاً. الرجالة دول <span class="text-gradient font-bold">شايلين اسم تقيل يوزن جبال، وشربوا المرجلة كابر عن كابر</span>. قاعدين قعدة صفا قدام الرهبة، والضحكة على وشوشهم بتطمنك إن الخير لسه فينا، وإن الغصن اللي تفرع من شجرة زرازير لسه طارح عز وشهامة.
+                    </p>
+                </div>
+            </div>
+
+            <!-- بطاقة 5: المدخل الرئيسي (الصورة 14.jpg) -->
+            <div class="flex flex-col lg:flex-row bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-800 mb-16 reveal hover:-translate-y-2 transition-transform duration-500">
+                <div class="lg:w-1/2 img-container bg-gray-100 dark:bg-gray-800 flex justify-center items-center p-2 interactive" onclick="openLightbox('14.jpg', 'بوابة التاريخ')">
+                    <img src="14.jpg" alt="المدخل الرئيسي" class="w-full h-full object-cover rounded-2xl shadow-inner">
+                    <div class="img-tooltip"><i class="fa-solid fa-magnifying-glass-plus mb-2 block text-center text-4xl"></i> كبر الصورة يا غالي</div>
+                </div>
+                <div class="lg:w-1/2 p-10 lg:p-14 flex flex-col justify-center">
+                    <div class="text-secondary mb-4"><i class="fa-solid fa-archway text-3xl"></i></div>
+                    <h3 class="text-4xl font-bold text-primary dark:text-white mb-6 border-r-4 border-secondary pr-4 font-heritage">بوابة التاريخ.. المدخل الكبير اللي انهد</h3>
+                    <p class="text-xl text-gray-700 dark:text-gray-300 leading-[2.2] text-justify">
+                        البوابة دي يا ولدي مش مجرد طوب مرصوص، البوابة دي <span class="text-gradient font-bold">ياما دخل منها كبارات البلد والضيوف اللي قاصدين العمار</span>. ده المدخل الرئيسي للعيلة اللي كان بيحرس التاريخ. ولما جم بتوع الغاز الطبيعي عشان يدخلوا المواسير، اضطرينا نكسر المدخل ده. صح الحيطان اتهدت، بس ربك سبحانه وتعالى أراد خير؛ الهَدة دي هي اللي خلتنا نكتشف اللوحة الخشبية المدفونة وننقذ كنز الجدود اللي كان هيضيع، عشان تفضل سيرتنا عطرة وحاضرة.
+                    </p>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ================= القسم الثالث: اللوحة والأثر ================= -->
+        <section id="artifact" class="py-24 bg-gray-100 dark:bg-[#181818] border-y border-gray-300 dark:border-gray-800 transition-colors">
+            <div class="container mx-auto px-6 max-w-7xl">
+                <div class="text-center mb-20 reveal">
+                    <span class="text-secondary font-bold text-xl tracking-wider">إنقاذ ريحة الجدود</span>
+                    <h2 class="text-5xl md:text-6xl font-heritage font-bold text-primary dark:text-white mt-2 mb-6">اللوحة الخشبية.. شاهدة على العظمة</h2>
+                    <div class="w-32 h-2 bg-secondary mx-auto rounded-full mb-8"></div>
+                    <p class="text-2xl leading-loose text-gray-700 dark:text-gray-300 max-w-4xl mx-auto">
+                        يا سبحان الله، بعد ما المدخل انكسر، ظهرت قدامنا يافطة خشب محفورة كأنها بتنطق؛ لوحة العمدة "سليمان الحاج زرازير" مكتوب عليها سنة ١٢٧٢ هجرية. حتة الخشبة دي شهادة ميلاد لتاريخنا، براءة ذمة من النسيان.
+                    </p>
+                </div>
+
+                <!-- الفيديو -->
+                <div class="bg-white dark:bg-darkCard rounded-3xl shadow-2xl overflow-hidden mb-16 border border-gray-200 dark:border-gray-800 reveal">
+                    <div class="bg-gradient-to-r from-primary to-gray-900 text-white p-8 text-center border-b-4 border-secondary">
+                        <h3 class="text-3xl font-bold font-heritage"><i class="fa-solid fa-film text-secondary mr-2"></i> شوف بعينك حكاية الخشب</h3>
+                    </div>
+                    <div class="flex flex-col lg:flex-row">
+                        <div class="lg:w-1/2 bg-black flex items-center justify-center p-4">
+                            <video controls class="w-full h-auto max-h-[500px] object-contain rounded-xl shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+                                <source src="9.mp4" type="video/mp4">
+                                متصفحك مش مشغل الفيديو.
+                            </video>
+                        </div>
+                        <div class="lg:w-1/2 p-10 lg:p-14 flex flex-col justify-center">
+                            <p class="text-2xl text-gray-700 dark:text-gray-300 leading-[2.2] text-justify">
+                                الفيديو ده بيوثق اللحظة اللي الرجالة طلعوا فيها اليافطة الخشب قبل ما اللوادر تدوسها. ولما نضفناها وغسلنا الخشب بمية الذهب، الحروف البارزة نطقت وقالت كلمتها: <br><br>
+                                <span class="block text-center text-3xl font-bold text-primary dark:text-white bg-yellow-100 dark:bg-yellow-900/30 px-6 py-4 rounded-xl mt-6 border border-secondary shadow-inner font-heritage leading-[2.2]">
+                                    "سنه ١٢٧٢ .... عبد الله سليمان زرازير ...<br>الحمد لله وحده لا شريك له"
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- بطاقات اللوحة -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <!-- حمل اللوحة -->
+                    <div class="bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-800 reveal hover:shadow-2xl transition-shadow">
+                        <div class="h-80 img-container interactive" onclick="openLightbox('4.jpg', 'رجالة شايلة تاريخ')">
+                            <img src="4.jpg" alt="حمل اللوحة" class="w-full h-full object-cover">
+                            <div class="img-tooltip"><i class="fa-solid fa-expand text-4xl"></i></div>
+                        </div>
+                        <div class="p-10">
+                            <h3 class="text-3xl font-bold text-primary dark:text-white mb-4 font-heritage">رجالة شايلة تاريخ يوزن جبال</h3>
+                            <p class="text-xl text-gray-700 dark:text-gray-300 leading-[2.2] text-justify">
+                                شوف الرجالة وهم شايلين يافطة جدهم الكبيرة، <span class="text-gradient font-bold">شايلينها كأنهم شايلين عِرضهم وشرفهم</span>. الفخر باين في عنيهم، لأنهم لحقوا تاريخ عيلتهم اللي بقاله أكتر من 171 سنة من الضياع. حملهم للوحة دي هو عهد ووعد إن سيرة العمدة سليمان واسم زرازير هيفضل عالي ومرفوع فوق الرؤوس، ومفيش هدة ولا زمن يقدر يمحيه.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- تفاصيل اللوحة -->
+                    <div class="bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-800 reveal hover:shadow-2xl transition-shadow">
+                        <div class="h-80 img-container interactive" onclick="openLightbox('5.jpg', 'حفر عاش سنين')">
+                            <img src="5.jpg" alt="تفاصيل اللوحة" class="w-full h-full object-cover">
+                            <div class="img-tooltip"><i class="fa-solid fa-expand text-4xl"></i></div>
+                        </div>
+                        <div class="p-10">
+                            <h3 class="text-3xl font-bold text-primary dark:text-white mb-4 font-heritage">دق وحفر عاش سنين وسنين</h3>
+                            <p class="text-xl text-gray-700 dark:text-gray-300 leading-[2.2] text-justify">
+                                قرب بص للحفر اللي على الخشب ده. النجار اللي دق الخشب ده من قرنين فاتوا كان عارف إنه بيكتب تاريخ. اليفط دي زمان كانت بتتحط على بوابات الكبارات، <span class="text-gradient font-bold">بتبقى زي الختم، بتقول للغريب إنت بتخطي عتبة مين</span>. صلابة الخشبة دي من صلابة الرجالة اللي اتسمت باسمهم، قدرت تقاوم السنين والتراب عشان تطلع لنا النهاردة وتحكيلنا عن عز عيلة زرازير في الصعيد كله.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- تفاصيل بالطول للوحة (الصورة 15.jpg) -->
+                <div class="flex flex-col lg:flex-row bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-800 mt-12 reveal hover:-translate-y-2 transition-transform duration-500">
+                    <div class="lg:w-1/2 img-container bg-gray-100 dark:bg-gray-800 flex justify-center items-center p-2 interactive" onclick="openLightbox('15.jpg', 'حفر الجدود اللي ما ينمحيش')">
+                        <img src="15.jpg" alt="اللوحة بالطول" class="w-full h-full object-cover rounded-2xl shadow-inner max-h-[600px]">
+                        <div class="img-tooltip"><i class="fa-solid fa-expand text-4xl"></i></div>
+                    </div>
+                    <div class="lg:w-1/2 p-10 lg:p-14 flex flex-col justify-center">
+                        <h3 class="text-3xl font-bold text-primary dark:text-white mb-4 font-heritage border-r-4 border-secondary pr-4">حفر الجدود اللي ما ينمحيش</h3>
+                        <p class="text-xl text-gray-700 dark:text-gray-300 leading-[2.2] text-justify">
+                            بص بالطول والعرض لحتة الخشبة دي، حفر عميق بأيادي تتلف في حرير. النقوش دي مش مجرد زينة، دي حكاية عز ومجد. اللوحة دي بتشهد على أصل عيلة زرازير، كل تفصيلة فيها بتنطق وتقول إحنا هنا من زمان الزمان، جذورنا ضاربة في الأرض ومفيش ريح تقدر تهزنا. دقق في كل حرف محفور، تلاقيه بيرد الروح ويأكد إن أمجاد الماضي لسه حية وبخير.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================= القسم الرابع: الوثائق الرسمية ================= -->
+        <section id="docs" class="py-24 container mx-auto px-6 max-w-7xl">
+            <div class="text-center mb-20 reveal">
+                <span class="text-secondary font-bold text-xl tracking-wider">الورق الميري ما بيكدبش</span>
+                <h2 class="text-5xl md:text-6xl font-heritage font-bold text-primary dark:text-white mt-2 mb-6">الورق اللي نطق بالحق</h2>
+                <div class="w-32 h-2 bg-secondary mx-auto rounded-full mb-8"></div>
+                <p class="text-2xl leading-[2.2] text-gray-700 dark:text-gray-300 max-w-4xl mx-auto">
+                    ولما ربك يريد يظهر الحق، يخليه يظهر من كل ناحية! تاني يوم الزيارة، تقع تحت إيدينا دفاتر ومخطوطات وأختام قديمة، نفتحها نلاقي اسم الجدود منور فيها زي الذهب، عشان كلامنا يبقى متوثق بختم الحكومة الميري وتاريخ الكبارات.
+                </p>
+            </div>
+
+            <!-- وثيقة 1 -->
+            <div class="flex flex-col lg:flex-row bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-800 mb-16 reveal">
+                <div class="lg:w-1/2 bg-[#f4ebd8] dark:bg-gray-800 flex items-center justify-center p-8 img-container interactive border-b lg:border-b-0 lg:border-l border-gray-300 dark:border-gray-700" onclick="openLightbox('1.jpg', 'دفتر الحكومة')">
+                    <img src="1.jpg" alt="غلاف السجل" class="max-w-full h-auto rounded shadow-lg border-2 border-primary/20">
+                    <div class="img-tooltip"><i class="fa-solid fa-search-plus text-4xl"></i></div>
+                </div>
+                <div class="lg:w-1/2 p-10 lg:p-14 flex flex-col justify-center">
+                    <div class="text-secondary mb-4"><i class="fa-solid fa-book-open text-3xl"></i></div>
+                    <h3 class="text-4xl font-bold text-primary dark:text-white mb-6 border-r-4 border-secondary pr-4 font-heritage">دفتر الحكومة وتاريخ الكبارات</h3>
+                    <p class="text-xl text-gray-700 dark:text-gray-300 leading-[2.2] text-justify">
+                        الصورة دي لغلاف دفتر المحكمة الشرعية بتاع طهطا من أيام مديرية جرجا سنة ١٨٩٥ ميلادية. الورق ده مش أي ورق، ده <span class="text-gradient font-bold">دفتر الحكومة اللي كان بيوثق أملاك وحقوق العائلات التقيلة</span>. الدفتر ده متسجل بخط الكاتب "عبدالرحمن أحمد الرفاعي"، وبيثبت للدنيا بحالها إن تاريخ زرازير مش بس محفور على الخشب، لأ ده متوثق في دفاتر الحكومة كعيلة من أعيان البلد ليها مركزها وهيبتها من أيام زمان.
+                    </p>
+                </div>
+            </div>
+
+            <!-- وثيقة 2 -->
+            <div class="flex flex-col lg:flex-row-reverse bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-800 mb-16 reveal">
+                <div class="lg:w-1/2 relative bg-[#f4ebd8] dark:bg-gray-800 flex items-center justify-center p-8 img-container interactive border-b lg:border-b-0 lg:border-r border-gray-300 dark:border-gray-700" onclick="openLightbox('2.jpg', 'حجة حسانين زرازير')">
+                    <div class="absolute top-4 left-4 lg:right-4 lg:left-auto bg-gradient-to-l from-secondary to-yellow-600 text-white font-bold px-6 py-2 rounded-xl shadow-lg z-10 text-2xl font-heritage border border-yellow-300">
+                        <i class="fa-regular fa-calendar-check mr-2"></i> ١٣٠٢ هـ (١٨٨٤م)
+                    </div>
+                    <img src="2.jpg" alt="وثيقة حسانين زرازير" class="max-w-full h-auto rounded shadow-lg border-2 border-primary/20">
+                    <div class="img-tooltip"><i class="fa-solid fa-search-plus text-4xl"></i></div>
+                </div>
+                <div class="lg:w-1/2 p-10 lg:p-14 flex flex-col justify-center">
+                    <div class="text-secondary mb-4"><i class="fa-solid fa-file-signature text-3xl"></i></div>
+                    <h3 class="text-4xl font-bold text-primary dark:text-white mb-6 border-r-4 border-secondary pr-4 font-heritage">حجة حسانين زرازير.. اسم منور في الدفاتر</h3>
+                    <p class="text-xl text-gray-700 dark:text-gray-300 leading-[2.2] text-justify">
+                        هنا بقى المعجزة كملت! نفتح الدفتر نلاقي قدامنا ورقة رسمية بإفادة تسديد ومكتوب فيها بالبنط العريض اسم <span class="text-gradient font-bold text-3xl">"حسانين زرازير"</span> من أعيان التل الزوكي. وحسانين ده يا غالي يطلع أخو العمدة سليمان اللي اسمه على لوحة الخشب، والاتنين ولاد الحاج زرازير. يعني <span class="text-gradient font-bold">الخشب بيكلم الورق، والورق بيبصم بالعشرة</span> إن النسب ده طاهر وتاريخه أصل متين مافيهوش شك ولا ريب، يرفع راس أي حد ينتمي ليه.
+                    </p>
+                </div>
+            </div>
+
+            <!-- وثيقة 3 -->
+            <div class="flex flex-col lg:flex-row bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-800 mb-16 reveal">
+                <div class="lg:w-1/2 relative bg-[#f4ebd8] dark:bg-gray-800 flex items-center justify-center p-8 img-container interactive border-b lg:border-b-0 lg:border-l border-gray-300 dark:border-gray-700" onclick="openLightbox('3.jpg', 'ورقة إسماعيل إبراهيم')">
+                    <div class="absolute top-4 right-4 bg-gradient-to-l from-secondary to-yellow-600 text-white font-bold px-6 py-2 rounded-xl shadow-lg z-10 text-2xl font-heritage border border-yellow-300">
+                        <i class="fa-regular fa-calendar-check mr-2"></i> ١٣٠٣ هـ (١٨٨٥م)
+                    </div>
+                    <img src="3.jpg" alt="وثيقة إسماعيل إبراهيم" class="max-w-full h-auto rounded shadow-lg border-2 border-primary/20">
+                    <div class="img-tooltip"><i class="fa-solid fa-search-plus text-4xl"></i></div>
+                </div>
+                <div class="lg:w-1/2 p-10 lg:p-14 flex flex-col justify-center">
+                    <div class="text-secondary mb-4"><i class="fa-solid fa-stamp text-3xl"></i></div>
+                    <h3 class="text-4xl font-bold text-primary dark:text-white mb-6 border-r-4 border-secondary pr-4 font-heritage">ورقة إسماعيل إبراهيم.. شهادة للتاريخ</h3>
+                    <p class="text-xl text-gray-700 dark:text-gray-300 leading-[2.2] text-justify">
+                        الدفاتر الميري ما بتكدبش يا ولدي، وما بتكتفيش بدليل واحد. نقلب الصفحة نلاقي للسنة اللي بعدها (١٣٠٣ هـ) ورقة تانية بإفادة تسديد معاملة لراجل تاني من رجالة البلد اسمه <strong>"إسماعيل إبراهيم"</strong> من التل الزوكي. الورق ده بيأكد إن القرية دي كانت <span class="text-gradient font-bold">قرية شغالة وفيها حركة اقتصادية كبيرة وتجارة وعمار</span>، وده كله كان تحت رعاية وحماية عائلاتها التقيلة. دي أمجاد بتتحكي وبنورثها لعيالنا وهم رافعين راسهم لسابع سما.
+                    </p>
+                </div>
+            </div>
+
+            <!-- وثيقة 4 (11.jpg) -->
+            <div class="flex flex-col lg:flex-row-reverse bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-800 mb-16 reveal">
+                <div class="lg:w-1/2 relative bg-[#f4ebd8] dark:bg-gray-800 flex items-center justify-center p-8 img-container interactive border-b lg:border-b-0 lg:border-r border-gray-300 dark:border-gray-700" onclick="openLightbox('11.jpg', 'كشف عمد طما ١٨٨٢م')">
+                    <div class="absolute top-4 left-4 lg:right-4 lg:left-auto bg-gradient-to-l from-secondary to-yellow-600 text-white font-bold px-6 py-2 rounded-xl shadow-lg z-10 text-2xl font-heritage border border-yellow-300">
+                        <i class="fa-regular fa-calendar-check mr-2"></i> ١٨٨٢م
+                    </div>
+                    <img src="11.jpg" alt="كشف العمد 1882" class="max-w-full h-auto rounded shadow-lg border-2 border-primary/20">
+                    <div class="img-tooltip"><i class="fa-solid fa-search-plus text-4xl"></i></div>
+                </div>
+                <div class="lg:w-1/2 p-10 lg:p-14 flex flex-col justify-center">
+                    <div class="text-secondary mb-4"><i class="fa-solid fa-list-ol text-3xl"></i></div>
+                    <h3 class="text-4xl font-bold text-primary dark:text-white mb-6 border-r-4 border-secondary pr-4 font-heritage">كشف العمد وكبارات طما.. اسم يجلجل</h3>
+                    <p class="text-xl text-gray-700 dark:text-gray-300 leading-[2.2] text-justify">
+                        الورق بيزيد تأكيد يا ولدي! بص للكشف ده، كشف عمد طما من أيام سنة ١٨٨٢ ميلادية. اسم جدنا <span class="text-gradient font-bold text-3xl">"حسانين زرازير"</span> منور كعمدة لـ "التل الزوكي". دي مش حكاوي قهاوي، ده تاريخ متسجل في الكتب ومطبوع يثبت إن العيلة دي ليها الريادة والقيادة والكلمة المسموعة من أكتر من قرن ونص، كلمتهم كانت بتمشي على الكبير والصغير في البلد.
+                    </p>
+                </div>
+            </div>
+
+            <!-- وثيقة 5 (12.jpg) -->
+            <div class="flex flex-col lg:flex-row bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-800 mb-16 reveal">
+                <div class="lg:w-1/2 relative bg-[#f4ebd8] dark:bg-gray-800 flex items-center justify-center p-8 img-container interactive border-b lg:border-b-0 lg:border-l border-gray-300 dark:border-gray-700" onclick="openLightbox('12.jpg', 'مخطوطة الأختام')">
+                    <img src="12.jpg" alt="مخطوطة الأختام" class="max-w-full h-auto rounded shadow-lg border-2 border-primary/20">
+                    <div class="img-tooltip"><i class="fa-solid fa-search-plus text-4xl"></i></div>
+                </div>
+                <div class="lg:w-1/2 p-10 lg:p-14 flex flex-col justify-center">
+                    <div class="text-secondary mb-4"><i class="fa-solid fa-scroll text-3xl"></i></div>
+                    <h3 class="text-4xl font-bold text-primary dark:text-white mb-6 border-r-4 border-secondary pr-4 font-heritage">حجة وتاريخ عليه أختام الكبارات</h3>
+                    <p class="text-xl text-gray-700 dark:text-gray-300 leading-[2.2] text-justify">
+                        دي بقى مش أي ورقة، دي حجة ومخطوطة قديمة مرشوشة بأختام كبارات الصعيد. الورق اللي عليه الأختام دي بيبقى مليان بأسرار وتاريخ بيوت العز، بيثبت مين كان بيحل ويربط في الزمان ده. كل ختم في المخطوطة دي بيحكي قصة راجل كلمته كانت سيف على رقبته، وتاريخ متأصل في طما وكوم العرب والتل الزوكي، تاريخ يوزن بالدهب.
+                    </p>
+                </div>
+            </div>
+
+            <!-- وثيقة 6 (13.jpg) -->
+            <div class="flex flex-col lg:flex-row-reverse bg-white dark:bg-darkCard rounded-3xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-800 mb-16 reveal">
+                <div class="lg:w-1/2 relative bg-[#f4ebd8] dark:bg-gray-800 flex items-center justify-center p-8 img-container interactive border-b lg:border-b-0 lg:border-r border-gray-300 dark:border-gray-700" onclick="openLightbox('13.jpg', 'أختام الأجداد')">
+                    <img src="13.jpg" alt="زوم الأختام" class="max-w-full h-auto rounded shadow-lg border-2 border-primary/20">
+                    <div class="img-tooltip"><i class="fa-solid fa-search-plus text-4xl"></i></div>
+                </div>
+                <div class="lg:w-1/2 p-10 lg:p-14 flex flex-col justify-center">
+                    <div class="text-secondary mb-4"><i class="fa-solid fa-fingerprint text-3xl"></i></div>
+                    <h3 class="text-4xl font-bold text-primary dark:text-white mb-6 border-r-4 border-secondary pr-4 font-heritage">ختم الجدود.. أصل وفصل ما يتوهش</h3>
+                    <p class="text-xl text-gray-700 dark:text-gray-300 leading-[2.2] text-justify">
+                        ولما تقرب وتزوم على المخطوطة دي، عينك هتقع على الختم والاسم المكتوب بمداد ما يبهتش. أختام الجدود دي كانت زي البصمة الميري اللي بتمشي على الكبير والصغير. ثبات الاسم وسط الأعيان في حتت الورق المعتقة دي بياكد بما لا يدع مجال للشك إن عيلة زرازير ليهم جذور ضاربة في الأرض، وتاريخهم كله أصالة ومرجلة ما تتنسيش مهما لفت الأيام.
+                    </p>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ================= قسم الاقتباسات والأقوال ================= -->
+        <section class="py-20 bg-primary text-white text-center border-y-4 border-secondary relative overflow-hidden">
+            <div class="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
+            <div class="container mx-auto px-6 relative z-10 reveal">
+                <i class="fa-solid fa-quote-right text-6xl text-secondary mb-6 opacity-50"></i>
+                <h3 class="text-3xl md:text-5xl font-heritage leading-[2.2] max-w-5xl mx-auto py-2 drop-shadow-md">
+                    "قالوها زمان يا ولدي: مش المرجلة إنك تقول أبويا كان وكان، المرجلة إنك تصون اسم أبوك وتعليه لسابع سما. وعيلة زرازير جابت رجالة تصون العهد وتشيل الراية جيلاً ورا جيل."
+                </h3>
+            </div>
+        </section>
+        
+        <!-- ================= قسم شجرة العائلة (الهرمية) ================= -->
+        <section id="family-tree-section" class="py-24 bg-[#fdfbf7] dark:bg-[#121212] border-y-[8px] border-secondary relative overflow-hidden transition-colors">
+            <div class="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')]"></div>
+            <div class="container mx-auto px-4 md:px-6 relative z-10">
+                <div class="text-center mb-16 reveal">
+                    <span class="text-secondary font-bold text-2xl tracking-wider"><i class="fa-solid fa-seedling mr-2"></i> غصون بتطرح رجالة</span>
+                    <h2 class="text-5xl md:text-7xl font-heritage font-bold text-primary dark:text-white mt-4 mb-6">شـجـرة عـائـلـة زرازيـر</h2>
+                    <div class="w-40 h-2 bg-secondary mx-auto rounded-full mb-8"></div>
+                    <p class="text-2xl leading-[2.2] text-gray-700 dark:text-gray-300 max-w-4xl mx-auto">
+                        من ظهر الجد الكبير "زرازير" طلعت فروع وعائلات تصد عين الشمس. ضيف اسمك واسم جدودك بالترتيب لحد "زرازير"، والخوارزمية هتربطك بإخواتك وعمامك بشكل شجرة هرمي احترافي!
+                    </p>
+                    <button onclick="window.openAddMemberModal()" class="mt-8 bg-primary dark:bg-white text-white dark:text-primary hover:bg-secondary dark:hover:bg-secondary hover:text-white font-bold py-4 px-10 rounded-full shadow-xl transform transition hover:-translate-y-2 text-2xl font-heritage interactive">
+                        ضيف اسمك لفرع العيلة <i class="fa-solid fa-pen-nib mr-2"></i>
+                    </button>
+                </div>
+
+                <!-- الهيكل الشجري الهرمي -->
+                <div id="approved-members-list" class="family-tree" dir="rtl">
+                    <!-- رسالة في حال عدم الاتصال بقاعدة البيانات -->
+                    <div class="text-center text-secondary font-bold text-xl w-full" id="tree-loading">
+                        <i class="fa-solid fa-spinner fa-spin text-3xl mb-2"></i><br>
+                        بنجيب المخطوطة من الدفاتر...
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= قسم الأسئلة الشائعة (FAQ) ================= -->
+        <section class="py-24 container mx-auto px-6 max-w-4xl reveal">
+            <h2 class="text-4xl font-heritage font-bold text-primary dark:text-white text-center mb-12">سؤال وجواب عن تاريخنا</h2>
+            
+            <div class="space-y-4">
+                <div class="border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-darkCard overflow-hidden">
+                    <button class="faq-btn w-full px-6 py-4 text-right flex justify-between items-center focus:outline-none interactive">
+                        <span class="text-xl font-bold text-primary dark:text-white">يا ترى اليافطة الخشب دي بقالها كام سنة بالظبط؟</span>
+                        <i class="fa-solid fa-chevron-down text-secondary transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 bg-gray-50 dark:bg-gray-800">
+                        <p class="p-6 text-lg text-gray-700 dark:text-gray-300 leading-[2]">تاريخ اللوحة التأسيسية اللي نجدناها من الهدم مكتوب عليها سنة ١٢٧٢ هجرية، يعني توافق تقريباً سنة ١٨٥٥ ميلادية، بحسبة بسيطة يطلع عمر اللوحة دي معدي الـ 171 سنة بحالهم، ودي فترة تكفي تعمر بلاد وتهد بلاد.</p>
+                    </div>
+                </div>
+                
+                <div class="border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-darkCard overflow-hidden">
+                    <button class="faq-btn w-full px-6 py-4 text-right flex justify-between items-center focus:outline-none interactive">
+                        <span class="text-xl font-bold text-primary dark:text-white">ليه الورق اللي لقيناه في المحكمة مهم قوي كده لعيلتنا؟</span>
+                        <i class="fa-solid fa-chevron-down text-secondary transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content max-h-0 overflow-hidden transition-all duration-300 bg-gray-50 dark:bg-gray-800">
+                        <p class="p-6 text-lg text-gray-700 dark:text-gray-300 leading-[2]">عشان الحكاوي الشفوية ممكن تتنسي أو تتغير مع الزمن، لكن الدفتر الميري ومخطوطات الأختام دي إثبات حكومي بختم النسر ما يقدرش حد يشكك فيه، بيأكد أسامي أجدادنا ونفوذهم في البلد، وبيسند قصة اللوحة الخشب ويثبت إننا عيلة ليها أصل وتاريخ من زمان الزمان.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- الفوتر -->
+    <footer class="bg-[#1a110c] text-white py-16 mt-auto text-center relative overflow-hidden">
+        <div class="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')]"></div>
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="mb-8">
+                <i class="fa-solid fa-fort-awesome text-5xl text-secondary mb-4"></i>
+                <h2 class="text-5xl font-heritage text-secondary">عائلة زرازير</h2>
+            </div>
+            <p class="text-2xl text-gray-300 max-w-3xl mx-auto mb-8 leading-[2.2] font-heritage">
+                التاريخ يا ولدي مش حكاية بتتحكي قبل النوم، التاريخ ده عِرض وشرف وتاج على الراس، بنسلمه لولادنا عشان يعرفوا إنهم من ظهر رجالة كبارات.
+            </p>
+            <div class="w-full h-px bg-gray-800 my-8"></div>
+            <div class="flex justify-between items-center text-gray-500 font-bold text-lg max-w-4xl mx-auto">
+                <span>تم توثيق هذا الإرث بكل فخر ومرجلة &copy; ديوان عائلة زرازير التوثيقي</span>
+                
+                <!-- زر العمدة السري (للاعتماد) -->
+                <button onclick="window.openAdminModal()" class="interactive hover:text-secondary transition-colors" title="بوابة العمدة (لوحة التحكم)">
+                    <i class="fa-solid fa-lock"></i>
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ================= شريط الأدوات العائم ================= -->
+    <div class="fixed bottom-6 left-6 flex flex-col gap-3 z-40">
+        <button id="scrollToTop" class="interactive bg-secondary hover:bg-yellow-600 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center text-xl transition-all duration-300 transform scale-0 opacity-0">
+            <i class="fa-solid fa-arrow-up"></i>
+        </button>
+    </div>
+
+    <!-- ================= النوافذ المنبثقة (Modals) ================= -->
+
+    <!-- نافذة إضافة اسم لشجرة العائلة -->
+    <div id="addMemberModal" class="modal">
+        <div class="bg-white dark:bg-darkCard rounded-2xl shadow-2xl w-full max-w-md p-8 relative border-t-8 border-secondary transform transition-all">
+            <button onclick="window.closeModals()" class="absolute top-4 left-4 text-gray-500 hover:text-red-600 text-2xl interactive"><i class="fa-solid fa-xmark"></i></button>
+            <div class="text-center mb-6">
+                <i class="fa-solid fa-pen-nib text-4xl text-secondary mb-3"></i>
+                <h3 class="text-3xl font-heritage font-bold text-primary dark:text-white">سجل اسمك في المخطوطة</h3>
+                <p class="text-gray-600 dark:text-gray-400 mt-2 text-sm">عشان اسمك يتربط صح مع إخواتك وعمامك، اكتب اسمك واسم جدودك بالترتيب لحد "زرازير" وبين كل اسم مسافة أو كلمة "بن"<br><span class="font-bold text-secondary">مثال: عبدالله حسام محمد محمود يوسف زرازير</span></p>
+            </div>
+            
+            <form id="lineageForm" onsubmit="window.submitLineage(event)">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-primary dark:text-white font-bold mb-2">اسمك ونسبك بالترتيب (حتى زرازير):</label>
+                        <textarea id="fullNameInput" rows="3" required placeholder="مثال: حمزة حسام محمد محمود يوسف زرازير" class="w-full bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg p-3 text-primary dark:text-white focus:outline-none focus:border-secondary transition-colors font-cairo cursor-text"></textarea>
+                    </div>
+                </div>
+                <button type="submit" id="submitBtn" class="w-full mt-8 bg-secondary hover:bg-yellow-600 text-white font-bold py-3 rounded-xl shadow-lg transition-colors text-xl font-heritage interactive">
+                    ارفع الورقة للعمدة <i class="fa-solid fa-paper-plane mr-2"></i>
+                </button>
+                <div id="submitMsg" class="mt-4 text-center font-bold hidden"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- نافذة العمدة (السرية) للاعتماد -->
+    <div id="adminModal" class="modal">
+        <div class="bg-white dark:bg-darkCard rounded-2xl shadow-2xl w-full max-w-2xl p-8 relative border-t-8 border-primary transform transition-all flex flex-col max-h-[90vh]">
+            <button onclick="window.closeModals()" class="absolute top-4 left-4 text-gray-500 hover:text-red-600 text-2xl interactive"><i class="fa-solid fa-xmark"></i></button>
+            
+            <!-- شاشة تسجيل الدخول للعمدة -->
+            <div id="adminLoginScreen" class="text-center">
+                <i class="fa-solid fa-user-shield text-5xl text-primary dark:text-white mb-4"></i>
+                <h3 class="text-4xl font-heritage font-bold text-primary dark:text-white mb-6">بوابة العمدة (للاعتماد)</h3>
+                <input type="password" id="adminPassword" placeholder="كلمة سر الدفاتر..." class="w-full max-w-xs mx-auto bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg p-3 text-center text-2xl tracking-widest focus:border-primary focus:outline-none block mb-4 cursor-text">
+                <button onclick="window.checkAdmin()" class="bg-primary text-white font-bold py-3 px-8 rounded-xl hover:bg-gray-800 transition-colors text-xl interactive">افتح الدفتر</button>
+                <p id="loginError" class="text-red-600 font-bold mt-3 hidden">الكلمة غلط يا ولدي!</p>
+            </div>
+
+            <!-- شاشة مراجعة الطلبات -->
+            <div id="adminDashboard" class="hidden flex-col h-full">
+                <div class="text-center mb-6 border-b pb-4 border-gray-200 dark:border-gray-700">
+                    <h3 class="text-3xl font-heritage font-bold text-secondary">دفتر الطلبات المرفوعة</h3>
+                    <p class="text-gray-500">راجع الأنساب واعتمد اللي يصح منها للشجرة</p>
+                </div>
+                <div id="pending-list" class="overflow-y-auto flex-grow pr-2 space-y-4">
+                    <!-- الطلبات تظهر هنا -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ================= سكريبتات التفاعل والميزات الأساسية ================= -->
+    <script>
+        // 1. شاشة التحميل (Preloader)
+        document.addEventListener('DOMContentLoaded', () => {
+            const preloader = document.getElementById('preloader');
+            if(preloader) {
+                setTimeout(() => {
+                    preloader.style.opacity = '0';
+                    setTimeout(() => { preloader.style.display = 'none'; }, 500);
+                }, 800);
+            }
+        });
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            if(preloader) preloader.style.display = 'none';
+        });
+
+        // 2. مؤشر الماوس المخصص
+        const cursor = document.getElementById('cursor');
+        const cursorDot = document.getElementById('cursor-dot');
+        
+        document.addEventListener('mousemove', (e) => {
+            if(cursor && cursorDot) {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+                cursorDot.style.left = e.clientX + 'px';
+                cursorDot.style.top = e.clientY + 'px';
+            }
+        });
+
+        const interactives = document.querySelectorAll('.interactive, a, button, .img-container');
+        interactives.forEach(el => {
+            el.addEventListener('mouseenter', () => { if(cursor) cursor.classList.add('hovered-cursor'); });
+            el.addEventListener('mouseleave', () => { if(cursor) cursor.classList.remove('hovered-cursor'); });
+        });
+
+        // 3. شريط تقدم القراءة
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            const pb = document.getElementById('progress-bar');
+            if(pb) pb.style.width = scrolled + '%';
+        });
+
+        // 4. زر العودة للأعلى
+        const scrollToTopBtn = document.getElementById('scrollToTop');
+        window.addEventListener('scroll', () => {
+            if(!scrollToTopBtn) return;
+            if (window.scrollY > 500) {
+                scrollToTopBtn.classList.remove('scale-0', 'opacity-0');
+                scrollToTopBtn.classList.add('scale-100', 'opacity-100');
+            } else {
+                scrollToTopBtn.classList.add('scale-0', 'opacity-0');
+                scrollToTopBtn.classList.remove('scale-100', 'opacity-100');
+            }
+        });
+        if(scrollToTopBtn) {
+            scrollToTopBtn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+
+        // 5. حركات الظهور (Reveal & Counters)
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealOptions = { threshold: 0.15, rootMargin: "0px 0px -50px 0px" };
+        const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('active');
+                if (entry.target.querySelector('.counter')) {
+                    const counters = entry.target.querySelectorAll('.counter');
+                    counters.forEach(counter => {
+                        const target = +counter.getAttribute('data-target');
+                        const increment = target / 125; 
+                        let current = 0;
+                        const updateCounter = () => {
+                            current += increment;
+                            if (current < target) {
+                                counter.innerText = Math.ceil(current);
+                                requestAnimationFrame(updateCounter);
+                            } else {
+                                counter.innerText = target;
+                            }
+                        };
+                        updateCounter();
+                    });
+                    entry.target.classList.remove('counter'); 
+                }
+                observer.unobserve(entry.target);
+            });
+        }, revealOptions);
+        revealElements.forEach(el => revealOnScroll.observe(el));
+
+        // 6. الوضع الليلي
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const htmlElement = document.documentElement;
+        if(themeToggle && themeIcon) {
+            themeToggle.addEventListener('click', () => {
+                htmlElement.classList.toggle('dark');
+                if (htmlElement.classList.contains('dark')) {
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                } else {
+                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.add('fa-moon');
+                }
+            });
+        }
+
+        // 7. عارض الصور (Lightbox)
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxCaption = document.getElementById('lightbox-caption');
+        const downloadBtn = document.getElementById('download-btn');
+
+        window.openLightbox = function(imgSrc, caption) {
+            if(!lightbox) return;
+            lightboxImg.src = imgSrc;
+            lightboxCaption.innerText = caption;
+            downloadBtn.href = imgSrc; 
+            lightbox.classList.add('show');
+            document.body.style.overflow = 'hidden'; 
+        }
+        window.closeLightbox = function() {
+            if(!lightbox) return;
+            lightbox.classList.remove('show');
+            setTimeout(() => { lightboxImg.src = ''; }, 300); 
+            document.body.style.overflow = 'auto'; 
+        }
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "Escape" && lightbox && lightbox.classList.contains('show')) window.closeLightbox();
+        });
+
+        // 8. الأسئلة الشائعة
+        const faqBtns = document.querySelectorAll('.faq-btn');
+        faqBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const content = this.nextElementSibling;
+                const icon = this.querySelector('i');
+                document.querySelectorAll('.faq-content').forEach(el => {
+                    if (el !== content) {
+                        el.style.maxHeight = null;
+                        el.previousElementSibling.querySelector('i').classList.remove('rotate-180');
+                    }
+                });
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                    icon.classList.remove('rotate-180');
+                } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    icon.classList.add('rotate-180');
+                }
+            });
+        });
+    </script>
+
+    <!-- ================= إعدادات وأكواد Firebase ================= -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+
+        // إعدادات Firebase الخاصة بك
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+            apiKey: "AIzaSyCa5MsengO2YLoYUsIegQFfHY-BjwAQ-t0",
+            authDomain: "abas-73006.firebaseapp.com",
+            projectId: "abas-73006",
+            storageBucket: "abas-73006.firebasestorage.app",
+            messagingSenderId: "808083792981",
+            appId: "1:808083792981:web:376627faae7c6c942aa0dc",
+            measurementId: "G-T7F2KCM5W8"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'zarazir-app';
+
+        let currentUser = null;
+        let allTreeData = [];
+
+        // تسجيل الدخول لحماية القاعدة
+        const initAuth = async () => {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (e) {
+                console.error("Auth error:", e);
+                const loadingEl = document.getElementById('tree-loading');
+                if(loadingEl) {
+                    loadingEl.innerHTML = '<div class="text-red-500 font-bold p-4 bg-red-50 rounded-xl border border-red-200">الدفاتر مقفولة! لازم تفعل (Anonymous Authentication) في إعدادات Firebase بتاعتك.</div>';
+                }
+            }
+        };
+        initAuth();
+
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            if (user) {
+                startListening();
+            }
+        });
+
+        const getTreeCollection = () => collection(db, 'artifacts', appId, 'public', 'data', 'family_tree');
+        const getTreeDoc = (docId) => doc(db, 'artifacts', appId, 'public', 'data', 'family_tree', docId);
+
+        // نوافذ
+        const addModal = document.getElementById('addMemberModal');
+        const adminModal = document.getElementById('adminModal');
+
+        window.openAddMemberModal = () => { if(addModal) addModal.classList.add('show'); };
+        window.openAdminModal = () => { if(adminModal) adminModal.classList.add('show'); };
+        window.closeModals = () => {
+            if(addModal) addModal.classList.remove('show');
+            if(adminModal) adminModal.classList.remove('show');
+            const loginScreen = document.getElementById('adminLoginScreen');
+            const dashScreen = document.getElementById('adminDashboard');
+            const passInput = document.getElementById('adminPassword');
+            if(loginScreen) loginScreen.classList.remove('hidden');
+            if(dashScreen) dashScreen.classList.add('hidden');
+            if(passInput) passInput.value = '';
+        };
+
+        // ================= خوارزمية بناء الشجرة الهرمية =================
+        function buildHierarchyTree(docs) {
+            const root = { name: "الحاج زرازير أبوبكر الزوكي", children: {} };
+            
+            docs.forEach(doc => {
+                // تنظيف الاسم وإزالة كلمة بن
+                let cleanName = doc.fullName.trim().replace(/\s+بن\s+/g, " ").replace(/\s+ابن\s+/g, " ");
+                let words = cleanName.split(/\s+/);
+                let names = [];
+                
+                // دمج الأسماء المركبة مثل (عبد الله، أبو بكر) لتصبح كلمة واحدة في الشجرة
+                for (let i = 0; i < words.length; i++) {
+                    if ((words[i] === "عبد" || words[i] === "ابو" || words[i] === "أبو") && i + 1 < words.length) {
+                        names.push(words[i] + " " + words[i+1]);
+                        i++;
+                    } else {
+                        names.push(words[i]);
+                    }
+                }
+                
+                // قلب المصفوفة ليبدأ من الجد وينتهي بالابن
+                names.reverse();
+                
+                // تجاهل اسم زرازير إذا كتبه المستخدم في النهاية، لأن الجذر موجود بالفعل
+                if (names.length > 0 && names[0].includes("زرازير")) {
+                    names.shift();
+                }
+                
+                // بناء الشجرة وربط العقد ببعضها
+                let currentNode = root;
+                names.forEach((name) => {
+                    if (!currentNode.children[name]) {
+                        currentNode.children[name] = { name: name, children: {} };
+                    }
+                    currentNode = currentNode.children[name];
+                });
+            });
+            return root;
+        }
+
+        // دالة توليد كود HTML للشجرة الهرمية
+        function generateTreeHtml(node, isRoot = false) {
+            let html = '<li>';
+            if(isRoot) {
+                html += `<div class="family-tree-node !bg-gradient-to-b !from-secondary !to-yellow-700 !text-white !border-4 !border-white dark:!border-gray-800 shadow-xl px-8 py-4 mb-4"><i class="fa-solid fa-crown text-2xl mb-2 text-yellow-200 block"></i>${node.name}</div>`;
+            } else {
+                html += `<div class="family-tree-node">${node.name}</div>`;
+            }
+            
+            const childrenKeys = Object.keys(node.children);
+            if (childrenKeys.length > 0) {
+                html += '<ul>';
+                childrenKeys.forEach(key => {
+                    html += generateTreeHtml(node.children[key], false);
+                });
+                html += '</ul>';
+            }
+            html += '</li>';
+            return html;
+        }
+
+        // ================================================================
+
+        function startListening() {
+            onSnapshot(getTreeCollection(), (snapshot) => {
+                allTreeData = [];
+                snapshot.forEach((docSnap) => {
+                    allTreeData.push({ id: docSnap.id, ...docSnap.data() });
+                });
+
+                renderApprovedTree();
+                const dash = document.getElementById('adminDashboard');
+                if (dash && dash.classList.contains('flex')) {
+                    renderPendingList();
+                }
+            }, (error) => {
+                console.error("Error fetching tree: ", error);
+                const loadingEl = document.getElementById('tree-loading');
+                if(loadingEl) {
+                    loadingEl.innerHTML = `
+                        <div class="text-center text-red-600 font-bold p-6 bg-red-50 dark:bg-gray-800 rounded-xl border border-red-200 shadow-md w-full">
+                            <i class="fa-solid fa-lock text-4xl mb-3"></i><br>
+                            عذراً يا غالي، الدفاتر مقفولة ومحمية!<br>
+                            <span class="text-sm font-normal mt-2 block text-gray-700 dark:text-gray-300">
+                            يرجى الذهاب إلى إعدادات Firebase > <b>Firestore Database</b> > <b>Rules</b> وتغييرها إلى:<br>
+                            <code dir="ltr" class="block mt-2 text-sm text-gray-800 bg-gray-200 p-2 rounded">allow read, write: if true;</code>
+                            </span>
+                        </div>`;
+                }
+            });
+        }
+
+        function renderApprovedTree() {
+            const treeContainer = document.getElementById('approved-members-list');
+            if(!treeContainer) return;
+            const approvedDocs = allTreeData.filter(d => d.status === 'approved').sort((a, b) => a.timestamp - b.timestamp);
+
+            treeContainer.innerHTML = '';
+            if (approvedDocs.length === 0) {
+                treeContainer.innerHTML = '<div class="text-center text-gray-500 font-bold bg-white dark:bg-darkCard p-6 rounded-2xl shadow relative z-10 border border-gray-200 dark:border-gray-800 w-full max-w-2xl mx-auto mt-10">الشجرة لسه بتطرح.. كن أول واحد يسجل اسمه في الفروع!</div>';
+                return;
+            }
+
+            // تطبيق الخوارزمية وتوليد الـ HTML
+            const hierarchicalTree = buildHierarchyTree(approvedDocs);
+            const treeHtml = `<ul>${generateTreeHtml(hierarchicalTree, true)}</ul>`;
+            
+            treeContainer.innerHTML = treeHtml;
+        }
+
+        function renderPendingList() {
+            const pendingList = document.getElementById('pending-list');
+            if (!pendingList) return;
+            const pendingDocs = allTreeData.filter(d => d.status === 'pending').sort((a, b) => a.timestamp - b.timestamp);
+
+            pendingList.innerHTML = '';
+            if (pendingDocs.length === 0) {
+                pendingList.innerHTML = '<p class="text-center text-gray-500 mt-10">الدفتر فاضي، مفيش طلبات جديدة يا عمدة.</p>';
+                return;
+            }
+
+            pendingDocs.forEach((data) => {
+                const reqHtml = `
+                    <div class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-5 flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div class="text-right w-full">
+                            <p class="font-bold text-primary dark:text-white font-heritage text-xl">${data.fullName}</p>
+                        </div>
+                        <div class="flex gap-2 w-full md:w-auto justify-end">
+                            <button onclick="window.approveRequest('${data.id}')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-bold transition-colors"><i class="fa-solid fa-check"></i> اعتمد للشجرة</button>
+                            <button onclick="window.rejectRequest('${data.id}')" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-bold transition-colors"><i class="fa-solid fa-trash"></i> ارفض</button>
+                        </div>
+                    </div>
+                `;
+                pendingList.innerHTML += reqHtml;
+            });
+        }
+
+        window.submitLineage = async (e) => {
+            e.preventDefault();
+            if (!currentUser) {
+                alert("انتظر هبابة لحد ما نتصل بقاعدة البيانات...");
+                return;
+            }
+
+            const fullName = document.getElementById('fullNameInput').value.trim();
+            const submitBtn = document.getElementById('submitBtn');
+            const msgBox = document.getElementById('submitMsg');
+
+            if(!fullName) return;
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري الرفع...';
+
+            try {
+                await addDoc(getTreeCollection(), {
+                    fullName: fullName,
+                    status: "pending",
+                    timestamp: Date.now()
+                });
+                
+                msgBox.innerHTML = '<span class="text-green-600">طلبك اترفع للعمدة بنجاح! انتظر الاعتماد عشان ينور الشجرة وتتربط مع إخواتك.</span>';
+                msgBox.classList.remove('hidden');
+                document.getElementById('lineageForm').reset();
+                
+                setTimeout(() => {
+                    window.closeModals();
+                    msgBox.classList.add('hidden');
+                }, 4000);
+
+            } catch (error) {
+                console.error("Error adding document: ", error);
+                msgBox.innerHTML = '<span class="text-red-600">حصل مشكلة في الدفاتر! جرب تاني أو اتأكد إنك فاتح نت وصلاحيات القاعدة سليمة.</span>';
+                msgBox.classList.remove('hidden');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'ارفع الورقة للعمدة <i class="fa-solid fa-paper-plane mr-2"></i>';
+            }
+        };
+
+        window.checkAdmin = () => {
+            const pass = document.getElementById('adminPassword').value;
+            const err = document.getElementById('loginError');
+            if(pass === "1855") {
+                err.classList.add('hidden');
+                document.getElementById('adminLoginScreen').classList.add('hidden');
+                document.getElementById('adminDashboard').classList.remove('hidden');
+                document.getElementById('adminDashboard').classList.add('flex');
+                renderPendingList();
+            } else {
+                err.classList.remove('hidden');
+            }
+        };
+
+        window.approveRequest = async (docId) => {
+            if(confirm("متأكد إنك عايز تعتمد النسب ده وتنزله الشجرة وتخليه يتربط مع إخواته؟")) {
+                const docRef = getTreeDoc(docId);
+                await updateDoc(docRef, { status: "approved" });
+            }
+        };
+
+        window.rejectRequest = async (docId) => {
+            if(confirm("متأكد إنك عايز ترفض وتمسح الطلب ده خالص؟")) {
+                const docRef = getTreeDoc(docId);
+                await deleteDoc(docRef);
+            }
+        };
+    </script>
+</body>
+</html>
