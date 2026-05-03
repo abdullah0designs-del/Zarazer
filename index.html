@@ -686,8 +686,8 @@
             <div class="flex justify-between items-center text-gray-500 font-bold text-lg max-w-4xl mx-auto">
                 <span>تم توثيق هذا الإرث بكل فخر ومرجلة &copy; ديوان عائلة زرازير التوثيقي</span>
                 
-                <!-- زر العمدة السري (للاعتماد) -->
-                <button onclick="window.openAdminModal()" class="interactive hover:text-secondary transition-colors" title="بوابة العمدة (لوحة التحكم)">
+                <!-- زر المشرف السري (للاعتماد) -->
+                <button onclick="window.openAdminModal()" class="interactive hover:text-secondary transition-colors" title="لوحة تحكم المشرف">
                     <i class="fa-solid fa-lock"></i>
                 </button>
             </div>
@@ -721,22 +721,22 @@
                     </div>
                 </div>
                 <button type="submit" id="submitBtn" class="w-full mt-8 bg-secondary hover:bg-yellow-600 text-white font-bold py-3 rounded-xl shadow-lg transition-colors text-xl font-heritage interactive">
-                    ارفع الورقة  <i class="fa-solid fa-paper-plane mr-2"></i>
+                    أرسل طلب الإضافة <i class="fa-solid fa-paper-plane mr-2"></i>
                 </button>
                 <div id="submitMsg" class="mt-4 text-center font-bold hidden"></div>
             </form>
         </div>
     </div>
 
-    <!-- نافذة العمدة (السرية) للاعتماد -->
+    <!-- نافذة المشرف (السرية) للاعتماد -->
     <div id="adminModal" class="modal">
         <div class="bg-white dark:bg-darkCard rounded-2xl shadow-2xl w-full max-w-2xl p-8 relative border-t-8 border-primary transform transition-all flex flex-col max-h-[90vh]">
             <button onclick="window.closeModals()" class="absolute top-4 left-4 text-gray-500 hover:text-red-600 text-2xl interactive"><i class="fa-solid fa-xmark"></i></button>
             
-            <!-- شاشة تسجيل الدخول للعمدة -->
+            <!-- شاشة تسجيل الدخول للمشرف -->
             <div id="adminLoginScreen" class="text-center">
                 <i class="fa-solid fa-user-shield text-5xl text-primary dark:text-white mb-4"></i>
-                <h3 class="text-4xl font-heritage font-bold text-primary dark:text-white mb-6">بوابة العمدة (للاعتماد)</h3>
+                <h3 class="text-4xl font-heritage font-bold text-primary dark:text-white mb-6">لوحة تحكم المشرف</h3>
                 <input type="password" id="adminPassword" placeholder="كلمة سر الدفاتر..." class="w-full max-w-xs mx-auto bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg p-3 text-center text-2xl tracking-widest focus:border-primary focus:outline-none block mb-4 cursor-text">
                 <button onclick="window.checkAdmin()" class="bg-primary text-white font-bold py-3 px-8 rounded-xl hover:bg-gray-800 transition-colors text-xl interactive">افتح الدفتر</button>
                 <p id="loginError" class="text-red-600 font-bold mt-3 hidden">الكلمة غلط يا ولدي!</p>
@@ -1150,7 +1150,7 @@
 
             pendingList.innerHTML = '';
             if (pendingDocs.length === 0) {
-                pendingList.innerHTML = '<p class="text-center text-gray-500 mt-10">الدفتر فاضي، مفيش طلبات جديدة يا عمدة.</p>';
+                pendingList.innerHTML = '<p class="text-center text-gray-500 mt-10">الدفتر فاضي، مفيش طلبات جديدة للمراجعة.</p>';
                 return;
             }
 
@@ -1193,7 +1193,7 @@
                     timestamp: Date.now()
                 });
                 
-                msgBox.innerHTML = '<span class="text-green-600">طلبك اترفع للعمدة بنجاح! انتظر الاعتماد عشان ينور الشجرة وتتربط مع إخواتك.</span>';
+                msgBox.innerHTML = '<span class="text-green-600">طلبك اترفع للمراجعة بنجاح! انتظر الاعتماد عشان ينور الشجرة وتتربط مع إخواتك.</span>';
                 msgBox.classList.remove('hidden');
                 document.getElementById('lineageForm').reset();
                 
@@ -1208,7 +1208,7 @@
                 msgBox.classList.remove('hidden');
             } finally {
                 submitBtn.disabled = false;
-                submitBtn.innerHTML = 'ارفع الورقة للعمدة <i class="fa-solid fa-paper-plane mr-2"></i>';
+                submitBtn.innerHTML = 'أرسل طلب الإضافة <i class="fa-solid fa-paper-plane mr-2"></i>';
             }
         };
 
